@@ -1,7 +1,7 @@
 <template>
   <div>
     <headernav />
-    <div class="flex justify-center my-10">
+    <div class="flex justify-center bg-stone-100">
       <slot></slot>
     </div>
     <Footernav />
