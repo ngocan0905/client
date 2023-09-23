@@ -43,9 +43,7 @@
             <div class="text-lg font-semibold">categories :</div>
 
             <div class="text-gray-500 ml-2">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae tempore iure
-              laboriosam magnam ipsum labore enim quam est. Asperiores autem nemo debitis
-              exercitationem beatae a excepturi eligendi nulla. Omnis, quod!
+              {{ productStore.productById.category }}
             </div>
           </div>
           <div class="py-2 flex items-center">
@@ -90,7 +88,7 @@
             <div class="font-semibold">No comment there.</div>
           </section>
           <section v-else class="py-2 border-b" v-for="item in productStore.productById.ratings">
-            <div class="font-semibold">{{ item.postedby }}</div>
+            <NameById :data="item.postedby" />
             <StarRating :rating="item.star" :star-size="15" :show-rating="false" />
             <sub>{{ item.comment }}</sub>
           </section>
@@ -98,7 +96,9 @@
       </div>
       <div class="my-24">
         <div class="text-xl font-semibold my-4">Our hot products</div>
-        <div class="bg-white shadow-2xl rounded-lg"><SlidePoduct /></div>
+        <div class="bg-white shadow-2xl rounded-lg">
+          <SlidePoduct />
+        </div>
       </div>
     </div>
   </ClientLayout>
@@ -106,14 +106,15 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import ClientLayout from "../layouts/ClientLayout.vue";
+import NameById from "../components/NameById.vue";
 import StarRating from "vue-star-rating";
 import SlidePoduct from "../components/SlideProduct.vue";
 import { useRoute } from "vue-router";
 import { useProductStore } from "../stores/productStore";
 const route = useRoute();
 const productStore = useProductStore();
-
 const colors = ref([]);
+const name = ref([]);
 onMounted(async () => {
   // get product byid
   await productStore.getProductById(route.params.id);

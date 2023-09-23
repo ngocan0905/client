@@ -2,7 +2,7 @@
   <swiper
     :navigation="true"
     :modules="modules"
-    :slides-per-view="5"
+    :slides-per-view="4"
     :space-between="20"
     class="w-full h-full"
   >
