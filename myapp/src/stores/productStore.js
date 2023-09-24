@@ -38,9 +38,16 @@ export const useProductStore = defineStore("product", {
       }
     },
     loadLikedProductIds() {
-      const cookieValue = Cookies.get("favoriteProduct");
-      if (cookieValue) {
-        this.likedProductIds = JSON.parse(cookieValue);
+      try {
+        const cookieValue = Cookies.get("favoriteProduct");
+        if (cookieValue) {
+          const decodeString = decodeURIComponent(cookieValue);
+          const idArray = decodeString.split(",");
+          this.likedProductIds = idArray;
+          console.log(this.likedProductIds);
+        }
+      } catch (error) {
+        console.log("error parsing json from cookie", error);
       }
     },
   },

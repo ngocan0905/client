@@ -22,11 +22,13 @@ const products = ref([]);
 const productStore = useProductStore();
 
 onMounted(async () => {
+  await productStore.loadLikedProductIds();
   const idProduct = productStore.likedProductIds;
   for (let id of idProduct) {
     await productStore.getProductById(id);
     products.value.push(productStore.productById);
   }
+
   console.log(products.value);
 });
 </script>

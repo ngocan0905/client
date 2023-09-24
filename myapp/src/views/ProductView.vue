@@ -114,9 +114,8 @@ import { useProductStore } from "../stores/productStore";
 const route = useRoute();
 const productStore = useProductStore();
 const colors = ref([]);
-const name = ref([]);
 onMounted(async () => {
-  // get product byid
+  // get product by id
   await productStore.getProductById(route.params.id);
   // get color of product
   const idColor = productStore.productById.color;
