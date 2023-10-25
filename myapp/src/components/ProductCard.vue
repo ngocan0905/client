@@ -1,23 +1,18 @@
 <template>
   <div>
     <div
+      v-if="data"
       class="w-full max-w-[300px] h-auto pb-10 my-10 shadow-xl rounded-lg overflow-hidden relative border-2"
     >
       <div class="absolute right-2 top-2">
         <HeartIcon
           class="w-6 h-6 text-gray-50 drop-shadow-lg hover:scale-125 duration-300"
-          :class="isProductLiked(data._id) ? 'text-red-400' : ''"
+          :class="{ 'text-red-500': isLiked }"
           @click="toggleLike(data._id)"
         />
       </div>
       <div class="min-h-[300px]">
-        <img
-          v-if="data.images == 0"
-          src="../assets/images/master_dynamic_two.webp"
-          alt=""
-          class="object-cover rounded-md"
-        />
-        <img v-else :src="data.images" alt="" class="object-contain rounded-md min-h-[400px]" />
+        <img :src="data.images" alt="" class="object-contain rounded-md min-h-[300px]" />
       </div>
 
       <div>
@@ -29,7 +24,7 @@
         </router-link>
         <div class="p-2">
           <StarRating
-            :rating="data.totalrating"
+            :rating="parseInt(data.totalrating)"
             :read-only="true"
             :star-size="20"
             :show-rating="false"
@@ -45,16 +40,34 @@
 import StarRating from "vue-star-rating";
 import { HeartIcon } from "@heroicons/vue/24/solid";
 import { useProductStore } from "../stores/productStore";
-import { ref } from "vue";
+import jsCookie from "js-cookie";
+import { computed, onMounted, ref } from "vue";
+import { useGeneralStore } from "../stores/generalStore";
 const productStore = useProductStore();
+const generalStore = useGeneralStore();
 const { data } = defineProps(["data"]);
 
-const isProductLiked = productStore.isProductLiked;
+const wishlist = ref([]);
+const isLiked = computed(() => {
+  return productStore.isProductInWishList(data._id);
+});
+
 const toggleLike = (productId) => {
-  if (isProductLiked(productId)) {
-    productStore.removeLikedProductId(productId);
+  const token = jsCookie.get("user");
+  console.log(token);
+  if (!token) {
+    generalStore.isLoginOpen = true;
   } else {
-    productStore.addLikedProductId(productId);
+    const isProductLiked = isLiked.value;
+    if (isProductLiked) {
+      productStore.toggleProductToWishList(productId, "remove");
+    } else {
+      productStore.toggleProductToWishList(productId, "add");
+    }
   }
 };
+
+onMounted(() => {
+  wishlist.value = jsCookie.get("wishlist");
+});
 </script>

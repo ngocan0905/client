@@ -5,8 +5,8 @@ const axiosClient = axios.create({
   withCredentials: true,
 });
 
-function setupAxiosClientInterceptors() {
-  const token = Cookies.get("user");
+function setupAxiosAdminInterceptors() {
+  const token = Cookies.get("admin");
   if (token) {
     axiosClient.interceptors.request.use(
       (config) => {
@@ -19,5 +19,5 @@ function setupAxiosClientInterceptors() {
     );
   }
 }
-setupAxiosClientInterceptors();
+setupAxiosAdminInterceptors();
 export default axiosClient;

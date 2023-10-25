@@ -6,13 +6,32 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+
       component: HomeView,
     },
     {
       path: "/store",
       name: "store",
+      meta: {
+        breadcrumb: "> store",
+      },
       component: () => import("../views/StoreView.vue"),
+    },
+    {
+      path: "/blog",
+      name: "blog",
+      meta: {
+        breadcrumb: "> blog",
+      },
+      component: () => import("../views/BlogView.vue"),
+    },
+    {
+      path: "/cart",
+      name: "cart",
+      meta: {
+        breadcrumb: "> cart",
+      },
+      component: () => import("../views/CartView.vue"),
     },
     {
       path: "/product/:id",
@@ -20,19 +39,76 @@ const router = createRouter({
       component: () => import("../views/ProductView.vue"),
     },
     {
+      path: "/blog/:id",
+      name: "blog-detail",
+      component: () => import("../views/BlogDetailView.vue"),
+    },
+    {
+      path: "/contact",
+      name: "contact",
+      component: () => import("../views/ContactView.vue"),
+    },
+    {
       path: "/favorite",
       name: "favorite",
       component: () => import("../views/FavoriteView.vue"),
     },
+    // admin
     {
-      path: "/login",
-      name: "login",
-      component: () => import("../views/LoginView.vue"),
+      path: "/dashboard",
+      name: "dashboard",
+      meta: {
+        breadcrumb: "> dashboard",
+      },
+      component: () => import("../views/DashBoard.vue"),
     },
     {
-      path: "/register",
-      name: "register",
-      component: () => import("../views/RegisterView.vue"),
+      path: "/dashboard/user",
+      name: "UserManagement",
+      meta: {
+        breadcrumb: "user",
+      },
+      component: () => import("../views/UserMagnagement.vue"),
+    },
+    {
+      path: "/dashboard/product",
+      name: "ProductManagement",
+      meta: {
+        breadcrumb: ">product",
+      },
+      component: () => import("../views/ProductManagement.vue"),
+    },
+    {
+      path: "/dashboard/product/category",
+      name: "ProductCategoryManagement",
+      meta: {
+        breadcrumb: "> category",
+      },
+      component: () => import("../views/CategoryManagement.vue"),
+    },
+    {
+      path: "/dashboard/blog",
+      name: "BlogManagement",
+      meta: {
+        breadcrumb: " > blog",
+      },
+      component: () => import("../views/BlogManagement.vue"),
+    },
+    {
+      path: "/dashboard/blog/category",
+      name: "BlogCategoryManagement",
+      meta: {
+        breadcrumb: "> category",
+      },
+      component: () => import("../views/BlogCategoryManagement.vue"),
+    },
+    {
+      path: "/dashboard/brand",
+      name: "BrandManagement",
+      meta: {
+        breadcrumb: "> brand",
+      },
+      component: () => import("../views/BrandManagement.vue"),
     },
   ],
 });

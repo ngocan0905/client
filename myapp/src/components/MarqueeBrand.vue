@@ -1,10 +1,12 @@
 <template>
-  <Vue3Marquee pause-on-hover="true">
-    <div>1</div>
-    <div>2</div>
-    <div>2</div>
-    <div>3</div>
-    <div>4</div>
+  <Vue3Marquee pause-on-hover="true" class="py-2 overflow-hidden">
+    <img class="mx-4 h-36 w-auto object-cover" src="../assets/logo/asus-logo.png" alt="" />
+    <img class="mx-4 h-20 w-auto object-cover" src="../assets/logo/hp-logo.png" alt="" />
+    <img class="mx-4 h-20 w-auto object-cover" src="../assets/logo/Apple-logo.png" alt="" />
+    <img class="mx-4 h-20 w-auto object-cover" src="../assets/logo/lenovo-logo.png" alt="" />
+    <img class="mx-4 h-20 w-auto object-cover" src="../assets/logo/oppo-logo.png" alt="" />
+    <img class="mx-4 h-12 w-auto object-cover" src="../assets/logo/realme-logo.png" alt="" />
+    <img class="mx-4 h-20 w-auto object-cover" src="../assets/logo/xiaomi-logo.png" alt="" />
   </Vue3Marquee>
 </template>
 <script setup>

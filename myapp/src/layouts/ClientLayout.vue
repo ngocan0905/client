@@ -1,13 +1,18 @@
 <template>
-  <div>
+  <div class="">
     <headernav />
-    <div class="flex justify-center bg-stone-100">
+
+    <div class="flex flex-col items-center bg-gray-100 min-h-screen">
+      <div>
+        <BreadCrumb />
+      </div>
       <slot></slot>
     </div>
     <Footernav />
   </div>
 </template>
 <script setup>
-import headernav from "../components/Header.vue";
-import Footernav from "../components/Footer.vue";
+import headernav from "../components/HeaderClient.vue";
+import Footernav from "../components/FooterClient.vue";
+import BreadCrumb from "../components/BreadCrumb.vue";
 </script>

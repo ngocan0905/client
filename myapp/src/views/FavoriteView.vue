@@ -5,7 +5,7 @@
         <div class="text-xl font-bold capitalize text-center py-4 text-gray-900">your favorite</div>
       </div>
       <div class="grid grid-cols-4 gap-5">
-        <div class="" v-for="product in products">
+        <div class="" v-for="product in validProducts" :key="product._id">
           <ProductCard :data="product" />
         </div>
       </div>
@@ -17,18 +17,21 @@
 import ProductCard from "../components/ProductCard.vue";
 import ClientLayout from "../layouts/ClientLayout.vue";
 import { useProductStore } from "../stores/productStore";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 const products = ref([]);
 const productStore = useProductStore();
-
 onMounted(async () => {
-  await productStore.loadLikedProductIds();
-  const idProduct = productStore.likedProductIds;
-  for (let id of idProduct) {
+  productStore.restoreWishListFromCookie();
+  const wishlist = productStore.wishlist;
+  for (let id of wishlist) {
     await productStore.getProductById(id);
     products.value.push(productStore.productById);
   }
+  // await jsCookie.set("wishlist", wishlist);
+  console.log(productStore.wishlist);
+});
 
-  console.log(products.value);
+const validProducts = computed(() => {
+  return products.value.filter((product) => product !== null);
 });
 </script>

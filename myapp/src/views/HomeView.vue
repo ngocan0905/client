@@ -42,7 +42,7 @@
         </div>
       </div>
       <!--  -->
-      <div class="w-full h-auto bg-stone-300 py-8 mt-24">
+      <div class="w-full h-auto border rounded-lg shadow-lg py-8 mt-24">
         <!-- service -->
         <div class="w-full flex justify-between px-4">
           <div class="flex justify-evenly items-center">
@@ -93,47 +93,47 @@
         </div>
         <hr class="w-full my-2" />
         <!-- danh mục -->
-        <div class="w-full flex justify-evenly mt-10">
+        <div class="w-full flex justify-evenly items-center mt-10">
           <div class="flex flex-col cursor-pointer items-center p-4">
-            <div class="rounded-full overflow-hidden w-32 h-32">
-              <img src="../assets/images/master_dynamic_two.webp" alt="" class="scale-150" />
+            <div class="overflow-hidden w-32 h-32 flex justify-center items-center">
+              <img src="../assets/images/laptop.png" alt="" class="" />
             </div>
             <div class="hover:underline font-semibold">Laptop</div>
           </div>
           <div class="flex flex-col cursor-pointer items-center p-4">
-            <div class="rounded-full overflow-hidden w-32 h-32">
-              <img src="../assets/images/master_dynamic_two.webp" alt="" class="scale-150" />
+            <div class="overflow-hidden w-32 h-32 flex justify-center items-center">
+              <img src="../assets/images/pc.png" alt="" class="" />
             </div>
             <div class="hover:underline font-semibold">Pc</div>
           </div>
           <div class="flex flex-col cursor-pointer items-center p-4">
-            <div class="rounded-full overflow-hidden w-32 h-32">
-              <img src="../assets/images/master_dynamic_two.webp" alt="" class="scale-150" />
+            <div class="overflow-hidden w-32 h-32 flex justify-center items-center">
+              <img src="../assets/images/tablet.png" alt="" class="w-16 h-20" />
             </div>
             <div class="hover:underline font-semibold">Tablet</div>
           </div>
           <div class="flex flex-col cursor-pointer items-center p-4">
-            <div class="rounded-full overflow-hidden w-32 h-32">
-              <img src="../assets/images/master_dynamic_two.webp" alt="" class="scale-150" />
+            <div class="overflow-hidden w-32 h-32 flex justify-center items-center">
+              <img src="../assets/images/phone.png" alt="" class="" />
             </div>
             <div class="hover:underline font-semibold">Smart Phone</div>
           </div>
           <div class="flex flex-col cursor-pointer items-center p-4">
-            <div class="rounded-full overflow-hidden w-32 h-32">
-              <img src="../assets/images/master_dynamic_two.webp" alt="" class="scale-150" />
+            <div class="overflow-hidden w-32 h-32 flex justify-center items-center">
+              <img src="../assets/images/screen.png" alt="" class="" />
             </div>
             <div class="hover:underline font-semibold">Screen</div>
           </div>
           <div class="flex flex-col cursor-pointer items-center p-4">
-            <div class="rounded-full overflow-hidden w-32 h-32">
-              <img src="../assets/images/master_dynamic_two.webp" alt="" class="scale-150" />
+            <div class="overflow-hidden w-32 h-32 flex justify-center items-center">
+              <img src="../assets/images/keyboard.png" alt="" class="" />
             </div>
             <div class="hover:underline font-semibold">Keyboard</div>
           </div>
         </div>
       </div>
       <!-- thương hiệu -->
-      <div class="w-full h-auto bg-stone-200 mt-24 flex justify-evenly">
+      <div class="w-full h-auto border shadow-lg rounded-lg mt-24 flex justify-evenly">
         <MarqueeBrand />
       </div>
       <!-- bộ sưu tập nổi bật -->
@@ -164,6 +164,7 @@ import SlideProduct from "../components/SlideProduct.vue";
 import SlideBlog from "../components/SlideBlog.vue";
 import MainLayout from "../layouts/ClientLayout.vue";
 import MarqueeBrand from "../components/MarqueeBrand.vue";
+import { CodeBracketIcon } from "@heroicons/vue/24/solid";
 const productData = ref();
 const blogData = ref();
 onBeforeMount(async () => {
