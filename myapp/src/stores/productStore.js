@@ -143,5 +143,21 @@ export const useProductStore = defineStore("product", {
         console.log(error);
       }
     },
+    async createProductCategory(title) {
+      try {
+        const request = await axiosAdmin.post("proCat", { title: title });
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleteProductCategory(categoryId) {
+      try {
+        const request = await axiosAdmin.delete(`proCat/${categoryId}`);
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 });

@@ -40,6 +40,7 @@
               active ? 'bg-gray-500 text-white' : 'text-gray-900',
               'flex w-full items-center rounded-md px-2 py-2 text-sm ',
             ]"
+            @click="handleBlockUser(user._id)"
           >
             <LockClosedIcon class="w-5 h-5 mr-3" />
             <div>Block</div>
@@ -51,6 +52,7 @@
               active ? 'bg-gray-500 text-white' : 'text-gray-900',
               'flex w-full items-center rounded-md px-2 py-2 text-sm ',
             ]"
+            @click="handleUnblockUser(user._id)"
           >
             <LockOpenIcon class="w-5 h-5 mr-3" />
             <div>Unblock</div>
@@ -62,6 +64,7 @@
               active ? 'bg-gray-500 text-white' : 'text-gray-900',
               'flex w-full items-center rounded-md px-2 py-2 text-sm ',
             ]"
+            @click="handleDeleteUser(user._id)"
           >
             <TrashIcon class="w-5 h-5 mr-3" />
             <div>Delete</div>
@@ -81,8 +84,18 @@ import {
 } from "@heroicons/vue/24/solid";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 const { user } = defineProps(["user"]);
+const emits = defineEmits(["deletedUser", "blockUser", "unblockUser"]);
 function formatDate(date) {
   const newDate = new Date(date);
   return newDate.toLocaleDateString();
 }
+const handleDeleteUser = (userId) => {
+  emits("deletedUser", userId);
+};
+const handleBlockUser = (userId) => {
+  emits("blockUser", userId);
+};
+const handleUnblockUser = (userId) => {
+  emits("unblockUser", userId);
+};
 </script>

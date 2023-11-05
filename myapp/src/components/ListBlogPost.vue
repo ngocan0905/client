@@ -29,6 +29,7 @@
                 active ? 'bg-gray-500 text-white' : 'text-gray-900',
                 'flex w-full items-center rounded-md px-2 py-2 text-sm ',
               ]"
+              @click="handleDeleteBlog(data._id)"
             >
               <TrashIcon class="w-5 h-5 mr-3" />
               <div>Delete</div>
@@ -44,8 +45,12 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { Cog8ToothIcon, PencilIcon, TrashIcon } from "@heroicons/vue/24/solid";
 import transitioncomponent from "./transitioncomponent.vue";
 const { data } = defineProps(["data"]);
+const emits = defineEmits(["deleteBlog"]);
 function formatDate(date) {
   const newDate = new Date(date);
   return newDate.toLocaleDateString();
 }
+const handleDeleteBlog = (blogId) => {
+  emits("deleteBlog", blogId);
+};
 </script>

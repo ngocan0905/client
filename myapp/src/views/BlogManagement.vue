@@ -9,11 +9,11 @@
         </div>
       </div>
       <div
-        v-for="cate in listBlog"
-        :key="cate._id"
+        v-for="blog in listBlog"
+        :key="blog._id"
         class="py-2 px-4 border-b grid grid-cols-12 text-lg"
       >
-        <ListBlogPost :data="cate" />
+        <ListBlogPost :data="blog" @deleteBlog="deleteBlog" />
       </div>
     </div>
   </AdminLayout>
@@ -23,9 +23,24 @@ import { onMounted, ref } from "vue";
 import AdminLayout from "../layouts/AdminLayout.vue";
 import ListBlogPost from "../components/ListBlogPost.vue";
 import { useBlogStore } from "../stores/blogStore";
+import { useGeneralStore } from "../stores/generalStore";
 const blogStore = useBlogStore();
+const generalStore = useGeneralStore();
 const listBlog = ref([]);
 onMounted(async () => {
   listBlog.value = await blogStore.getBlogs();
 });
+const deleteBlog = async (blogId) => {
+  try {
+    generalStore.isLoading = true;
+    const deleted = await blogStore.deleteBlog(blogId);
+    if (deleted) {
+      const updatedBlog = listBlog.value.filter((blog) => blog._id === blogId);
+      listBlog.value = updatedBlog;
+      generalStore.isLoading = false;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>

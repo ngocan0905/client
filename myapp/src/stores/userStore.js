@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axiosClient from "../api/axiosClient";
+import axiosAdmin from "../api/axiosAdmin";
 import Cookies from "js-cookie";
 
 export const useUserStore = defineStore("user", {
@@ -83,5 +84,46 @@ export const useUserStore = defineStore("user", {
       const response = await axiosClient.get("user/cart");
       return response.data;
     },
+    // admin role
+    async registerAdmin(firstName, lastName, email, phoneNumber, password) {
+      try {
+        const request = await axiosClient.post("/user/register", {
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          mobile: phoneNumber,
+          password: password,
+          role: "admin",
+        });
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async blockUser(userId) {
+      try {
+        const request = await axiosAdmin.put(`user/block-user/${userId}`);
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async unblockUser(userId) {
+      try {
+        const request = await axiosAdmin.put(`user/unblock-user/${userId}`);
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleteUser(userId) {
+      try {
+        const request = await axiosAdmin.delete(`user/${userId}`);
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 });
+5;

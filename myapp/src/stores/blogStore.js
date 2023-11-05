@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axiosClient from "../api/axiosClient";
-
+import axiosAdmin from "../api/axiosAdmin";
 export const useBlogStore = defineStore("blogs", {
   state: () => ({}),
   actions: {
@@ -17,6 +17,14 @@ export const useBlogStore = defineStore("blogs", {
     async getBlogCategory() {
       const response = await axiosClient.get("blogCat");
       return response.data;
+    },
+    async deleteBlog(blogId) {
+      try {
+        const request = await axiosAdmin.delete(`blog/delete-blog/${blogId}`);
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });

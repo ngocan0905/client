@@ -47,8 +47,8 @@ const login = async () => {
   generalStore.isLoading = true;
   try {
     await userStore.loginAdmin(email.value, password.value);
-    const user = await jsCookie.get("user");
-    if (user) {
+    const admin = await jsCookie.get("admin");
+    if (admin) {
       location.reload();
     } else {
       generalStore.isLoading = false;

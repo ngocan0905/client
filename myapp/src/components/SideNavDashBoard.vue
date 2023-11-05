@@ -35,9 +35,10 @@
               </DisclosurePanel></RouterLink
             >
             <DisclosurePanel
-              class="px-4 py-2 pl-10 text-sm hover:text-gray-800 hover:bg-gray-200 duration-300 text-gray-200 rounded"
+              @click="generalStore.isAdminLoginOpen = true"
+              class="cursor-pointer px-4 py-2 pl-10 text-sm hover:text-gray-800 hover:bg-gray-200 duration-300 text-gray-200 rounded"
             >
-              Create User
+              Create Admin
             </DisclosurePanel>
           </TransitionRoot>
         </Disclosure>
@@ -80,7 +81,8 @@
               <RouterLink :to="{ name: 'ProductCategoryManagement' }">All Category</RouterLink>
             </DisclosurePanel>
             <DisclosurePanel
-              class="px-4 py-2 pl-10 text-sm hover:text-gray-800 hover:bg-gray-200 duration-300 text-gray-200 rounded"
+              @click="generalStore.isCreateProductCategoryOpen = true"
+              class="cursor-pointer px-4 py-2 pl-10 text-sm hover:text-gray-800 hover:bg-gray-200 duration-300 text-gray-200 rounded"
             >
               Create Category
             </DisclosurePanel>
@@ -114,7 +116,8 @@
             >
 
             <DisclosurePanel
-              class="px-4 py-2 pl-10 text-sm hover:text-gray-800 hover:bg-gray-200 duration-300 text-gray-200 rounded"
+              @click="generalStore.isCreateBlogOpen = true"
+              class="cursor-pointer px-4 py-2 pl-10 text-sm hover:text-gray-800 hover:bg-gray-200 duration-300 text-gray-200 rounded"
             >
               Create Blog
             </DisclosurePanel>

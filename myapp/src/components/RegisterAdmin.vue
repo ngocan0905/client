@@ -1,13 +1,23 @@
 <template>
   <div class="text-center text-[28px] mb-4 font-bold">Register</div>
-  <div class="px-6 pb-1.5 text-[15px]">Full Name</div>
+  <div class="px-6 pb-1.5 text-[15px]">First Name</div>
   <div class="px-6 pb-2">
     <TextInput
-      placeholder="Your name"
-      v-model:input="name"
+      placeholder=""
+      v-model:input="firstName"
       inputType="text"
       :autoFocus="true"
-      :error="errors && errors.name ? errors.name[0] : ''"
+      :error="errors && errors.firstName ? errors.firstName[0] : ''"
+    />
+  </div>
+  <div class="px-6 pb-1.5 text-[15px]">Last Name</div>
+  <div class="px-6 pb-2">
+    <TextInput
+      placeholder=""
+      v-model:input="lastName"
+      inputType="text"
+      :autoFocus="true"
+      :error="errors && errors.lastName ? errors.lastName[0] : ''"
     />
   </div>
   <div class="px-6 pb-1.5 text-[15px]">Email address</div>
@@ -51,8 +61,12 @@
 
   <div class="px-6 pb-2 mt-6">
     <button
-      :disabled="!email || !password || !confirmPassword || !name"
-      :class="!email || !password || !confirmPassword || !name ? 'bg-gray-200' : 'bg-gray-800'"
+      :disabled="!email || !password || !confirmPassword || !lastName || !firstName"
+      :class="
+        !email || !password || !confirmPassword || !lastName || !firstName
+          ? 'bg-gray-200'
+          : 'bg-gray-800'
+      "
       @click="register()"
       class="w-full text-[17px] font-semibold text-white py-3 rounded-sm"
     >
@@ -64,27 +78,21 @@
 import { ref } from "vue";
 import TextInput from "./TextInput.vue";
 import { useUserStore } from "../stores/userStore";
-import { useGeneralStore } from "../stores/generalStore";
 const userStore = useUserStore();
-const generalStore = useGeneralStore();
+let firstName = ref("");
+let lastName = ref("");
 let email = ref(null);
 let password = ref(null);
 let phoneNumber = ref(null);
 let confirmPassword = ref(null);
-let name = ref(null);
 let errors = ref(null);
 
 const register = async () => {
   errors.value = null;
   try {
-    await userStore.getTokens();
-    await userStore.registerUser(name.value, email.value, password.value, confirmPassword);
-    await userStore.getUser();
-    console.log(email);
-    generalStore.isLoginOpen = false;
+    await userStore.registerAdmin(firstName.value, lastName.value, email.value, password.value);
   } catch (error) {
     console.log(error);
-    errors.value = error.response.data.errors;
   }
 };
 </script>

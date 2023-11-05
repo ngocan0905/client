@@ -44,7 +44,6 @@ import { Cog8ToothIcon, PencilIcon, TrashIcon } from "@heroicons/vue/24/solid";
 const { data } = defineProps(["data"]);
 const emits = defineEmits(["deleteProduct"]);
 const handleDeleteProduct = (productId) => {
-  console.log(productId);
   emits("deleteProduct", productId);
 };
 </script>
