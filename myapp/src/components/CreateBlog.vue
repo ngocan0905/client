@@ -8,11 +8,12 @@
         <div class="grid grid-cols-4 m-4">
           <div class="col-span-2 flex flex-col mx-2">
             <!-- title -->
-            <label for="title">Title</label>
+            <label for="title" class="text-lg font-semibold mt-6">Title</label>
             <textarea
               id="title"
-              rows="2"
-              class="outline-none border-gray-800 border p-2 capitalize rounded-md"
+              v-model="selectedTitle"
+              rows="1"
+              class="outline-none border border-gray-300 shadow-md p-2 capitalize rounded-md"
             ></textarea>
             <!-- category -->
             <label for="category" class="text-lg font-semibold mt-6">Category</label>
@@ -83,27 +84,63 @@
               </div>
             </Combobox>
             <!-- content -->
-            <label for="title">Content</label>
+            <label for="title" class="text-lg font-semibold mt-6">Content</label>
             <textarea
               id="title"
-              rows="2"
-              class="outline-none border-gray-800 border p-2 capitalize rounded-md"
+              rows="10"
+              class="outline-none border-gray-300 shadow-md border p-2 capitalize rounded-md"
+              v-model="selectedContent"
             ></textarea>
           </div>
           <div class="col-span-2 flex flex-col mx-2">
             <!-- image -->
-            <label for="image">Images</label>
-            <input type="file" id="image" />
+            <label for="image" class="text-lg font-semibold mt-6">Images</label>
+            <input
+              type="file"
+              id="image"
+              ref="inputFile"
+              @input="inputFile = arguments[0]"
+              @change="handleImageUpload"
+              accept=".jpg, .png, .jpeg"
+              class="block w-full text-sm text-gray-900 border file:border-none file:py-1 file:px-3 file:rounded-md file:bg-gray-600 file:hover:bg-gray-900 file:duration-300 file:text-white border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-1"
+            />
+            <!-- review image -->
+            <label for="reviewImage" class="text-lg font-semibold mt-6">Review Images</label>
+            <div v-if="selectedImg.length > 0">
+              <div class="bg-gray-200 grid grid-cols-5 gap-2 p-4 rounded-md max-h-60 overflow-auto">
+                <div
+                  v-for="(img, index) in selectedImg"
+                  :key="index"
+                  class="relative bg-gray-300 flex justify-center"
+                >
+                  <img :src="img" alt="" class="h-24 w-auto object-cover" />
+                  <TrashIcon
+                    class="cursor-pointer hover:scale-105 active:scale-95 z-10 p-1 w-6 h-6 text-gray-500 bg-white rounded-full absolute top-1 right-1"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="relative border flex justify-end items-end py-4">
+        <div class="relative flex justify-end items-end py-4">
           <button
             class="bg-red-600 text-white py-1 px-2 mr-4 rounded-md"
             @click="generalStore.isCreateBlogOpen = false"
           >
             Cancel
           </button>
-          <button class="py-1 px-2 mr-4 rounded-md">Create</button>
+          <button
+            class="py-1 px-2 mr-4 rounded-md"
+            :disabled="!selectedTitle || !selectedContent || !selectedCategory"
+            :class="
+              !selectedTitle || !selectedContent || !selectedCategory
+                ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
+                : 'bg-green-600 text-white'
+            "
+            @click="eventCreateBlog()"
+          >
+            Create
+          </button>
         </div>
       </div>
     </div>
@@ -121,7 +158,11 @@ import {
 import { useGeneralStore } from "../stores/generalStore";
 import { useBlogStore } from "../stores/blogStore";
 import { computed, onMounted, ref } from "vue";
-import { ChevronUpDownIcon } from "@heroicons/vue/24/solid";
+import { CheckIcon, ChevronUpDownIcon, TrashIcon } from "@heroicons/vue/24/solid";
+const inputFile = ref(null);
+const selectedImg = ref([]);
+const selectedContent = ref("");
+const selectedTitle = ref("");
 const selectedCategory = ref("");
 const queryCategory = ref("");
 const category = ref([]);
@@ -138,7 +179,45 @@ const filteredCategory = computed(() => {
         category.title
           .toLowerCase()
           .replace(/\s+/g, "")
-          .oncludes(queryCategory.value.toLowerCase().replace(/\s+/g, ""))
+          .includes(queryCategory.value.toLowerCase().replace(/\s+/g, ""))
       );
 });
+// upload img
+const imgUrls = ref([]);
+const handleImageUpload = async (event) => {
+  const files = event.target.files;
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const imageDataUrl = event.target.result;
+      selectedImg.value.push(imageDataUrl);
+    };
+    reader.readAsDataURL(file);
+    const imgUploaded = await blogStore.pushImageToCloud(file);
+    if (imgUploaded && imgUploaded[0] && imgUploaded[0].url) {
+      imgUrls.value.push(imgUploaded[0].url);
+    }
+  }
+};
+const eventCreateBlog = async () => {
+  try {
+    generalStore.isLoading = true;
+    const blogCreated = await blogStore.createBlog(
+      selectedTitle.value,
+      selectedCategory.value,
+      selectedContent.value,
+      imgUrls.value
+    );
+    if (blogCreated) {
+      generalStore.isLoading = false;
+      location.reload();
+      generalStore.isCreateBlogOpen = false;
+    } else {
+      generalStore.isLoading = false;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>

@@ -11,15 +11,16 @@
         class="absolute min-w-[150px] right-5 origin-top-right rounded-md rounded-tr-none bg-gray-200 drop-shadow-sm"
       >
         <MenuItem v-slot="{ active }">
-          <button
+          <RouterLink
             :class="[
               active ? 'bg-gray-500 text-white' : 'text-gray-900',
               'flex w-full items-center rounded-md px-2 py-2 text-sm ',
             ]"
+            :to="{ name: 'DetailProduct', params: { id: data._id } }"
           >
             <PencilIcon class="w-5 h-5 mr-3" />
             <div>Edit</div>
-          </button>
+          </RouterLink>
         </MenuItem>
 
         <MenuItem v-slot="{ active }">
@@ -41,6 +42,7 @@
 <script setup>
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { Cog8ToothIcon, PencilIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import { RouterLink } from "vue-router";
 const { data } = defineProps(["data"]);
 const emits = defineEmits(["deleteProduct"]);
 const handleDeleteProduct = (productId) => {

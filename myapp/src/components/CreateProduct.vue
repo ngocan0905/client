@@ -299,7 +299,7 @@
                 : 'bg-green-600 text-white'
             "
             class="py-1 px-2 mr-4 rounded-md"
-            @click="createProduct()"
+            @click="createNewProduct()"
           >
             Create
           </button>
@@ -395,10 +395,11 @@ const handleImageUpload = async (event) => {
     const imgUploaded = await productStore.pushImageToCloud(file);
     if (imgUploaded && imgUploaded[0] && imgUploaded[0].url) {
       imgUrls.value.push(imgUploaded[0].url);
+      console.log(imgUrls.value);
     }
   }
 };
-const createProduct = async () => {
+const createNewProduct = async () => {
   try {
     generalStore.isLoading = true;
     const productCreated = await productStore.createProduct(
@@ -415,8 +416,6 @@ const createProduct = async () => {
       generalStore.isLoading = false;
       location.reload();
       generalStore.isCreateProductOpen = false;
-    } else {
-      generalStore.isLoading = false;
     }
   } catch (error) {
     console.log(error);

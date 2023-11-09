@@ -35,7 +35,7 @@ const deleteBlog = async (blogId) => {
     generalStore.isLoading = true;
     const deleted = await blogStore.deleteBlog(blogId);
     if (deleted) {
-      const updatedBlog = listBlog.value.filter((blog) => blog._id === blogId);
+      const updatedBlog = listBlog.value.filter((blog) => blog._id !== blogId);
       listBlog.value = updatedBlog;
       generalStore.isLoading = false;
     }

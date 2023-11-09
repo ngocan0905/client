@@ -110,6 +110,22 @@ const router = createRouter({
       },
       component: () => import("../views/BrandManagement.vue"),
     },
+    {
+      path: "/dashboard/coupon",
+      name: "CouponManagement",
+      meta: {
+        breadcrumb: "> coupon",
+      },
+      component: () => import("../views/CouponManagement.vue"),
+    },
+    {
+      path: "/dashboard/product/:id",
+      name: "DetailProduct",
+      meta: {
+        breadcrumb: ` > product > id`,
+      },
+      component: () => import("../views/EditProduct.vue"),
+    },
   ],
 });
 

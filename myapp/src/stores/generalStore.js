@@ -12,6 +12,7 @@ export const useGeneralStore = defineStore("general", {
     isCreateBlogCategoryOpen: false,
     isCreateBrandOpen: false,
     isCreateCouponOpen: false,
+    isEditProduct: false,
   }),
   actions: {
     async getAllUser() {

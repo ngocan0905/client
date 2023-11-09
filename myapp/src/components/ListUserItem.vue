@@ -23,17 +23,6 @@
       <MenuItems
         class="absolute min-w-[150px] right-5 origin-top-right rounded-md rounded-tr-none bg-gray-200 drop-shadow-sm"
       >
-        <MenuItem v-slot="{ active }">
-          <button
-            :class="[
-              active ? 'bg-gray-500 text-white' : 'text-gray-900',
-              'flex w-full items-center rounded-md px-2 py-2 text-sm ',
-            ]"
-          >
-            <PencilIcon class="w-5 h-5 mr-3" />
-            <div>Edit</div>
-          </button>
-        </MenuItem>
         <MenuItem v-if="!user.isBlocked" v-slot="{ active }">
           <button
             :class="[
@@ -75,13 +64,7 @@
   </div>
 </template>
 <script setup>
-import {
-  Cog8ToothIcon,
-  LockClosedIcon,
-  LockOpenIcon,
-  PencilIcon,
-  TrashIcon,
-} from "@heroicons/vue/24/solid";
+import { Cog8ToothIcon, LockClosedIcon, LockOpenIcon, TrashIcon } from "@heroicons/vue/24/solid";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 const { user } = defineProps(["user"]);
 const emits = defineEmits(["deletedUser", "blockUser", "unblockUser"]);

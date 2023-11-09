@@ -26,7 +26,7 @@ export const useProductStore = defineStore("product", {
     },
     async getProductById(id) {
       const response = await axiosClient.get(`product/${id}`);
-      this.productById = response.data;
+      return response.data;
     },
 
     async postRating(star, id, comment) {

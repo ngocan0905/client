@@ -1,7 +1,7 @@
 <template>
-  <div class="col-span-4 capitalize">{{ data.title }}</div>
-  <div class="col-span-3 flex justify-center">Created at : {{ formatDate(data.createdAt) }}</div>
-  <div class="col-span-3 flex justify-center">Created at : {{ formatDate(data.updatedAt) }}</div>
+  <div class="col-span-4 capitalize">{{ data.name }}</div>
+  <div class="col-span-3 flex justify-center">Discount: {{ data.discount }}%</div>
+  <div class="col-span-3 flex justify-center">Expiry at : {{ formatDate(data.expiry) }}</div>
   <div class="col-span-2 flex justify-end">
     <Menu as="div" class="relative inline-block text-left mr-4">
       <MenuButton class="flex flex-col w-full items-center">
@@ -29,7 +29,7 @@
                 active ? 'bg-gray-500 text-white' : 'text-gray-900',
                 'flex w-full items-center rounded-md px-2 py-2 text-sm ',
               ]"
-              @click="handleDeleteBrand(data._id)"
+              @click="handleDeleteCoupon(data._id)"
             >
               <TrashIcon class="w-5 h-5 mr-3" />
               <div>Delete</div>
@@ -45,12 +45,12 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { Cog8ToothIcon, PencilIcon, TrashIcon } from "@heroicons/vue/24/solid";
 import transitioncomponent from "./transitioncomponent.vue";
 const { data } = defineProps(["data"]);
-const emits = defineEmits(["deleteBrand"]);
+const emits = defineEmits(["delete"]);
 function formatDate(date) {
   const newDate = new Date(date);
   return newDate.toLocaleDateString();
 }
-const handleDeleteBrand = (brandId) => {
-  emits("deleteBrand", brandId);
+const handleDeleteCoupon = (couponId) => {
+  emits("delete", couponId);
 };
 </script>

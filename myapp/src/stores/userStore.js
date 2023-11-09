@@ -87,7 +87,7 @@ export const useUserStore = defineStore("user", {
     // admin role
     async registerAdmin(firstName, lastName, email, phoneNumber, password) {
       try {
-        const request = await axiosClient.post("/user/register", {
+        const request = await axiosAdmin.post("/user/register", {
           firstName: firstName,
           lastName: lastName,
           email: email,
