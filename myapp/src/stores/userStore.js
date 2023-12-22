@@ -13,7 +13,6 @@ export const useUserStore = defineStore("user", {
     async getUserById(id) {
       try {
         const response = await axiosClient.get(`user/${id}`);
-
         return response.data;
       } catch (error) {
         console.log("get user by id fail", error);
@@ -25,7 +24,6 @@ export const useUserStore = defineStore("user", {
           email: email,
           password: password,
         });
-
         const token = request.data.token;
         Cookies.set("user", token);
         this.isLogged = true;
@@ -45,9 +43,11 @@ export const useUserStore = defineStore("user", {
         console.log("login admin failed", error);
       }
     },
-    async registerUser(email, phoneNumber, password) {
+    async registerUser(lastName, firstName, email, phoneNumber, password) {
       try {
         await axiosClient.post("/user/register", {
+          firstName: firstName,
+          lastName: lastName,
           email: email,
           mobile: phoneNumber,
           password: password,
@@ -83,6 +83,44 @@ export const useUserStore = defineStore("user", {
     async loadProductInCart() {
       const response = await axiosClient.get("user/cart");
       return response.data;
+    },
+    async removeProductFromCartByid(productId) {
+      try {
+        const request = await axiosClient.delete(`user/cart/delete-by-id/${productId}`);
+
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async removeAllProductInCart() {
+      try {
+        const request = await axiosClient.delete("user/cart");
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async applyCoupon(code) {
+      try {
+        const request = await axiosClient.post("user/cart/apply-coupon", {
+          coupon: code,
+        });
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async createOder(coupon, paymentMEthods) {
+      try {
+        const request = await axiosClient.post("user/cart/cash-order", {
+          COD: coupon,
+          couponApplied: paymentMEthods,
+        });
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     // admin role
     async registerAdmin(firstName, lastName, email, phoneNumber, password) {
@@ -126,4 +164,3 @@ export const useUserStore = defineStore("user", {
     },
   },
 });
-5;

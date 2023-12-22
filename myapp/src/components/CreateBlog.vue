@@ -197,6 +197,7 @@ const handleImageUpload = async (event) => {
     const imgUploaded = await blogStore.pushImageToCloud(file);
     if (imgUploaded && imgUploaded[0] && imgUploaded[0].url) {
       imgUrls.value.push(imgUploaded[0].url);
+      console.log(imgUrls.value);
     }
   }
 };

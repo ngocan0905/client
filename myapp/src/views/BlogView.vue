@@ -1,8 +1,8 @@
 <template>
   <ClientLayout>
     <div class="w-1/2 my-10">
-      <div class="flex" v-if="blogs" v-for="blog in blogs" :key="blog">
-        <BlogPost :data="blog" />
+      <div class="flex" v-for="blog in blogs" :key="blog">
+        <BlogPost :blog="blog" />
       </div>
     </div>
   </ClientLayout>
@@ -15,7 +15,6 @@ import BlogPost from "../components/BlogPost.vue";
 const blogStore = useBlogStore();
 const blogs = ref([]);
 onMounted(async () => {
-  const data = await blogStore.getBlogs();
-  blogs.value = data;
+  blogs.value = await blogStore.getAllBlogs();
 });
 </script>

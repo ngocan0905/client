@@ -5,8 +5,6 @@ import Cookies from "js-cookie";
 const token = Cookies.get("admin");
 export const useProductStore = defineStore("product", {
   state: () => ({
-    productById: null,
-    color: [],
     productRatings: [],
     wishlist: [],
   }),
@@ -20,12 +18,17 @@ export const useProductStore = defineStore("product", {
       const response = await axiosClient.get("product");
       return response.data;
     },
+    async searchProductByName(query) {
+      const response = await axiosClient.get(`product/search?productName=${query}`);
+      return response.data;
+    },
     async getColorById(id) {
       const response = await axiosClient.get(`color/${id}`);
-      this.$state.color = response.data;
+      return response.data;
     },
     async getProductById(id) {
       const response = await axiosClient.get(`product/${id}`);
+      this.productById = response.data;
       return response.data;
     },
 
@@ -100,6 +103,7 @@ export const useProductStore = defineStore("product", {
       const response = await axiosClient.get("proCat");
       return response.data;
     },
+
     async pushImageToCloud(img) {
       try {
         const request = await axiosAdmin.post(
@@ -116,6 +120,14 @@ export const useProductStore = defineStore("product", {
         return request.data;
       } catch (error) {
         console.error(error);
+      }
+    },
+    async deleteImageFromCloud(imgId) {
+      try {
+        const request = await axiosAdmin.delete(`product/delete-img/${imgId}`);
+        return request.data;
+      } catch (error) {
+        console.log(error);
       }
     },
     async createProduct(title, brand, category, color, quanlity, price, image, description) {
@@ -154,6 +166,22 @@ export const useProductStore = defineStore("product", {
     async deleteProductCategory(categoryId) {
       try {
         const request = await axiosAdmin.delete(`proCat/${categoryId}`);
+        return request.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async updateProduct(productId, title, description, price, brand, category, color, images) {
+      try {
+        const request = await axiosAdmin.put(`product/${productId}`, {
+          title: title,
+          description: description,
+          price: price,
+          brand: brand,
+          category: category,
+          color: color,
+          images: images,
+        });
         return request.data;
       } catch (error) {
         console.log(error);

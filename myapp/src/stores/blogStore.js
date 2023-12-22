@@ -6,9 +6,8 @@ const token = Cookies.get("admin");
 export const useBlogStore = defineStore("blogs", {
   state: () => ({}),
   actions: {
-    async getBlogs() {
+    async getAllBlogs() {
       const response = await axiosClient.get("blog/all-blog");
-
       return response.data;
     },
     async getBlogById(id) {
@@ -53,6 +52,7 @@ export const useBlogStore = defineStore("blogs", {
           description: description,
           images: image,
         });
+        console.log(request.data);
         return request.data;
       } catch (error) {
         console.log(error);

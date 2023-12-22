@@ -28,7 +28,7 @@ const blogStore = useBlogStore();
 const generalStore = useGeneralStore();
 const listBlog = ref([]);
 onMounted(async () => {
-  listBlog.value = await blogStore.getBlogs();
+  listBlog.value = await blogStore.getAllBlogs();
 });
 const deleteBlog = async (blogId) => {
   try {

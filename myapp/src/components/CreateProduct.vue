@@ -265,10 +265,13 @@
                   :key="index"
                   class="relative bg-gray-300 flex justify-center"
                 >
-                  <img :src="img" alt="" class="h-24 w-auto object-cover" />
-                  <TrashIcon
-                    class="cursor-pointer hover:scale-105 active:scale-95 z-10 p-1 w-6 h-6 text-gray-500 bg-white rounded-full absolute top-1 right-1"
-                  />
+                  <div v-for="data in img" :key="data.public_id">
+                    <img :src="data.url" alt="" class="h-24 w-auto object-cover" />
+                    <TrashIcon
+                      @click="deleteImage(data.public_id)"
+                      class="cursor-pointer hover:scale-105 active:scale-95 z-10 p-1 w-6 h-6 text-gray-500 bg-white rounded-full absolute top-1 right-1"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -379,7 +382,6 @@ const filteredColor = computed(() => {
       );
 });
 //
-const imgUrls = ref([]);
 const handleImageUpload = async (event) => {
   const files = event.target.files;
 
@@ -387,16 +389,32 @@ const handleImageUpload = async (event) => {
     const file = files[i];
     const reader = new FileReader();
 
-    reader.onload = (e) => {
-      const imageDataUrl = e.target.result;
-      selectedImg.value.push(imageDataUrl);
-    };
+    // reader.onload = (e) => {
+    //   // const imageDataUrl = e.target.result;
+    // };
     reader.readAsDataURL(file);
     const imgUploaded = await productStore.pushImageToCloud(file);
-    if (imgUploaded && imgUploaded[0] && imgUploaded[0].url) {
-      imgUrls.value.push(imgUploaded[0].url);
-      console.log(imgUrls.value);
+    if (imgUploaded) {
+      selectedImg.value.push(imgUploaded);
+      console.log(selectedImg.value);
     }
+  }
+};
+const deleteImage = async (imgId) => {
+  console.log(imgId);
+  try {
+    generalStore.isLoading = true;
+
+    const deleted = await productStore.deleteImageFromCloud(imgId);
+    if (deleted) {
+      selectedImg.value = selectedImg.value.map((subArray) =>
+        subArray.filter((img) => img.public_id !== imgId)
+      );
+      console.log("Updated selectedImg.value:", selectedImg.value);
+      generalStore.isLoading = false;
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 const createNewProduct = async () => {
@@ -409,7 +427,7 @@ const createNewProduct = async () => {
       selectedColor.value.title,
       selectedQuanlity.value,
       selectedPrice.value,
-      imgUrls.value,
+      selectedImg.value,
       selectedDescription.value
     );
     if (productCreated) {

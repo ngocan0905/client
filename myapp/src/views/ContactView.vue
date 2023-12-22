@@ -55,7 +55,7 @@
             </div>
             <div class="flex my- items-center3">
               <EnvelopeIcon class="w-5 h-5 text-gray-600 mr-2" />
-              <div class="">anlecntt.0905@gmail.com</div>
+              <div class="">techworld@gmail.com</div>
             </div>
           </div>
         </div>

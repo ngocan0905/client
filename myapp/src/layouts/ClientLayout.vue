@@ -1,11 +1,8 @@
 <template>
-  <div class="">
-    <headernav />
-
-    <div class="flex flex-col items-center bg-gray-100 min-h-screen">
-      <div>
-        <BreadCrumb />
-      </div>
+  <div class="min-h-screen">
+    <headernav class="fixed" />
+    <div class="flex flex-col items-center bg-gray-100 h-full">
+      <BreadCrumb class="mt-[140px]" />
       <slot></slot>
     </div>
     <Footernav />

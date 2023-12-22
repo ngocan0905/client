@@ -11,8 +11,8 @@
           @click="toggleLike(data._id)"
         />
       </div>
-      <div class="min-h-[300px]">
-        <img :src="data.images" alt="" class="object-contain rounded-md min-h-[300px]" />
+      <div class="min-h-[300px]" v-for="img in data.images" :key="img.public_id">
+        <img :src="img[0].url" alt="" class="object-contain rounded-md min-h-[300px]" />
       </div>
 
       <div>

@@ -172,6 +172,5 @@ onBeforeMount(async () => {
   const blogs = await axiosClient.get("blog/all-blog");
   productData.value = products.data;
   blogData.value = blogs.data;
-  console.log(blogData.value);
 });
 </script>
