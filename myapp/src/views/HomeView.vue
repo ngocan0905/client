@@ -10,26 +10,10 @@
           />
         </div>
         <div class="grid grid-cols-2 w-1/2 h-auto gap-2">
-          <img
-            src="../assets/images/master_dynamic_two.webp"
-            alt=""
-            class="object-cover rounded-lg"
-          />
-          <img
-            src="../assets/images/master_dynamic_two.webp"
-            alt=""
-            class="object-cover rounded-lg"
-          />
-          <img
-            src="../assets/images/master_dynamic_two.webp"
-            alt=""
-            class="object-cover rounded-lg"
-          />
-          <img
-            src="../assets/images/master_dynamic_two.webp"
-            alt=""
-            class="object-cover rounded-lg"
-          />
+          <img src="../assets/images/home-1.png" alt="" class="object-cover rounded-lg" />
+          <img src="../assets/images/headphone-2.png" alt="" class="object-cover rounded-lg" />
+          <img src="../assets/images/keyboard-3.png" alt="" class="object-cover rounded-lg" />
+          <img src="../assets/images/mouse.webp" alt="" class="object-cover rounded-lg" />
         </div>
       </div>
       <!-- giảm giá  -->
@@ -38,7 +22,7 @@
           hot sale
         </div>
         <div class="w-full">
-          <SlideProduct class="" :data="productData" />
+          <SlideProduct class="" :data="hotProductData" />
         </div>
       </div>
       <!--  -->
@@ -139,10 +123,10 @@
       <!-- bộ sưu tập nổi bật -->
       <div class="flex flex-col items-center">
         <div class="text-xl uppercase hover:underline cursor-pointer font-semibold my-10">
-          featured collection
+          newest collection
         </div>
         <div class="w-full">
-          <SlideProduct class="" :data="productData" />
+          <SlideProduct class="" :data="newProductData" />
         </div>
       </div>
       <!-- blog mới nhất -->
@@ -165,10 +149,16 @@ import SlideBlog from "../components/SlideBlog.vue";
 import MainLayout from "../layouts/ClientLayout.vue";
 import MarqueeBrand from "../components/MarqueeBrand.vue";
 import { CodeBracketIcon } from "@heroicons/vue/24/solid";
+import { useProductStore } from "../stores/productStore";
+const productStore = useProductStore();
 const productData = ref();
+const hotProductData = ref([]);
+const newProductData = ref([]);
 const blogData = ref();
 onBeforeMount(async () => {
   const products = await axiosClient.get("product");
+  hotProductData.value = await productStore.getHotSaleProduct();
+  newProductData.value = await productStore.getNewProduct();
   const blogs = await axiosClient.get("blog/all-blog");
   productData.value = products.data;
   blogData.value = blogs.data;

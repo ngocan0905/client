@@ -222,14 +222,14 @@
               </div>
             </Combobox>
             <!-- quanlity -->
-            <label for="quanlity" class="text-lg font-semibold mt-6"
-              >Quanlity<span class="text-red-500 ml-2">*</span></label
+            <label for="quantity" class="text-lg font-semibold mt-6"
+              >Quantity<span class="text-red-500 ml-2">*</span></label
             >
             <input
-              id="quanlity"
+              id="quantity"
               type="number"
               min="1"
-              v-model="selectedQuanlity"
+              v-model="selectedQuantity"
               class="w-full rounded-md shadow-md border outline-none py-2 px-4 text-sm leading-5 text-gray-900"
             />
             <!-- price -->
@@ -295,9 +295,9 @@
             Cancel
           </button>
           <button
-            :disabled="!selectedTitle || !selectedQuanlity || !selectedPrice"
+            :disabled="!selectedTitle || !selectedQuantity || !selectedPrice"
             :class="
-              !selectedTitle || !selectedQuanlity || !selectedPrice
+              !selectedTitle || !selectedQuantity || !selectedPrice
                 ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
                 : 'bg-green-600 text-white'
             "
@@ -331,7 +331,7 @@ const selectedTitle = ref("");
 const selectedBrand = ref();
 const selectedCateogy = ref();
 const selectedColor = ref();
-const selectedQuanlity = ref(1);
+const selectedQuantity = ref(1);
 const selectedPrice = ref(1);
 const selectedImg = ref([]);
 const selectedDescription = ref("");
@@ -425,7 +425,7 @@ const createNewProduct = async () => {
       selectedBrand.value.title,
       selectedCateogy.value.title,
       selectedColor.value.title,
-      selectedQuanlity.value,
+      selectedQuantity.value,
       selectedPrice.value,
       selectedImg.value,
       selectedDescription.value

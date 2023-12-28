@@ -23,12 +23,18 @@
         <section
           id="result"
           v-if="resultQuery.length > 0"
-          class="absolute h-auto w-full bg-gray-100 shadow-lg rounded-lg text-gray-600 top-12"
+          class="absolute h-auto w-full bg-gray-100 shadow-lg rounded-lg text-gray-600 top-12 overflow-hidden"
         >
-          <ul v-for="product in resultQuery" :key="product._id" class="p-4">
-            <RouterLink :to="{ name: 'product', params: { id: product._id } }" class="">
-              {{ product.title }}</RouterLink
+          <ul v-for="product in resultQuery" :key="product._id" class="hover:bg-gray-200">
+            <RouterLink
+              :to="{ name: 'product', params: { id: product._id } }"
+              class="flex items-center justify-between py-1 px-4"
             >
+              <span>{{ product.title }}</span>
+              <div v-for="img in product.images[0]" :key="img.public_id">
+                <img :src="img.url" class="h-12 w-auto" alt="" />
+              </div>
+            </RouterLink>
           </ul>
         </section>
       </div>
@@ -108,6 +114,29 @@ onMounted(() => {
     userIsLogged.value = true;
   }
 });
+// const currentProduct = ref(null); // Sản phẩm hiện tại
+
+// // Watch for changes in the route params (specifically :id)
+// watch(
+//   () => router.currentRoute.value.params.id,
+//   async (newId) => {
+//     // Fetch data for the new product based on the newId
+//     // Lấy dữ liệu cho sản phẩm mới dựa trên newId
+//     try {
+//       const response = await fetch(`/api/products/${newId}`); // Replace with your API endpoint
+//       const productData = await response.json();
+
+//       // Update the currentProduct with the new data
+//       // Cập nhật currentProduct với dữ liệu mới
+//       currentProduct.value = productData;
+//     } catch (error) {
+//       console.error("Error fetching product data:", error);
+//       // Handle error if data fetching fails
+//       // Xử lý lỗi nếu việc lấy dữ liệu thất bại
+//     }
+//   }
+// );
+
 const handleSearchProduct = async () => {
   if (transcript.value !== "") {
     querySearch.value = transcript.value;

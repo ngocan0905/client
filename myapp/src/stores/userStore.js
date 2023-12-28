@@ -111,17 +111,7 @@ export const useUserStore = defineStore("user", {
         console.log(error);
       }
     },
-    async createOder(coupon, paymentMEthods) {
-      try {
-        const request = await axiosClient.post("user/cart/cash-order", {
-          COD: coupon,
-          couponApplied: paymentMEthods,
-        });
-        return request.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     // admin role
     async registerAdmin(firstName, lastName, email, phoneNumber, password) {
       try {
@@ -160,6 +150,52 @@ export const useUserStore = defineStore("user", {
         return request.data;
       } catch (error) {
         console.log(error);
+      }
+    },
+    async createOder(paymentDetails) {
+      try {
+        const request = await axiosClient.post("user/cart/create-order", paymentDetails);
+        return request.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("failed to create order");
+      }
+    },
+    async getOrder() {
+      try {
+        const response = await axiosClient.get("user/get-order");
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error(" lỗi khi lấy hóa đơn của giỏ hàng");
+      }
+    },
+    async getAllOrder(page) {
+      try {
+        const response = await axiosAdmin.get(`user/sold-order?page=${page}`);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("lỗi khi lấy danh sách mua hàng");
+      }
+    },
+    async getRevenueByDay(date) {
+      try {
+        const response = await axiosAdmin.get(`user/chart/${date}`);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Lỗi khi lấy thống kê doanh thu theo ngày");
+      }
+    },
+
+    async getRevenueByMonth(year, month) {
+      try {
+        const response = await axiosAdmin.get(`user/chart/month/${year}/${month}`);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Lỗi khi lấy thống kê doanh thu theo tháng");
       }
     },
   },

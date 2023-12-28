@@ -28,12 +28,9 @@ import SectionProductInCart from "../components/SectionProductInCart.vue";
 const userStore = useUserStore();
 const cart = ref([]);
 // const acceptCoupon = ref(false);
-const finalPrice = ref();
 // const codPayment = ref(true);
 onMounted(async () => {
   cart.value = await userStore.loadProductInCart();
-  console.log(cart.value);
-  finalPrice.value = cart.value.cartTotal;
 });
 
 // const checkoutOrder = async () => {

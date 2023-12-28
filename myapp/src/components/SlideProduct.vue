@@ -9,6 +9,7 @@
     <swiper-slide
       class="text-center flex justify-center items-center w-full h-auto px-4"
       v-for="item in data"
+      :key="item._id"
     >
       <product-card :data="item" />
     </swiper-slide>

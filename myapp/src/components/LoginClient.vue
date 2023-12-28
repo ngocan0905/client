@@ -16,7 +16,7 @@
       placeholder="Password"
       v-model:input="password"
       inputType="password"
-      :error="errors && errors.password ? errors.password[0] : ''"
+      @keydown.enter="login()"
     />
   </div>
   <div class="px-6 text-[12px] text-gray-600">Forgot password?</div>

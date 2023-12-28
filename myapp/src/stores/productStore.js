@@ -130,14 +130,14 @@ export const useProductStore = defineStore("product", {
         console.log(error);
       }
     },
-    async createProduct(title, brand, category, color, quanlity, price, image, description) {
+    async createProduct(title, brand, category, color, quantity, price, image, description) {
       try {
         const request = await axiosAdmin.post("product", {
           title: title,
           brand: brand,
           category: category,
           color: color,
-          quanlity: quanlity,
+          quantity: quantity,
           price: price,
           images: image,
           description: description,
@@ -171,9 +171,10 @@ export const useProductStore = defineStore("product", {
         console.log(error);
       }
     },
-    async updateProduct(productId, title, description, price, brand, category, color, images) {
+    async updateProduct(productId, updatedProduct) {
+      const { title, description, price, brand, category, color, images } = updatedProduct;
       try {
-        const request = await axiosAdmin.put(`product/${productId}`, {
+        const request = await axiosAdmin.patch(`product/${productId}`, {
           title: title,
           description: description,
           price: price,
@@ -184,7 +185,61 @@ export const useProductStore = defineStore("product", {
         });
         return request.data;
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        throw new Error("Lỗi khi cập nhật sản phẩm"); // Bạn có thể xử lý lỗi ở đây hoặc truyền lỗi ra bên ngoài để xử lý ở nơi gọi hàm này.
+      }
+    },
+    async addTagProduct(productId, tag) {
+      try {
+        const request = await axiosAdmin.post("/product/tag", {
+          productId: productId,
+          tags: [tag],
+        });
+        return request.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("lỗi khi tạo tag sản phẩm");
+      }
+    },
+    async deleteTagProduct(productId, tag) {
+      try {
+        const request = await axiosAdmin.delete(`product/tag/${productId}`, {
+          data: {
+            tagToDelete: tag,
+          },
+        });
+        return request.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("lỗi khi xóa sản phẩm");
+      }
+    },
+    async getHotSaleProduct() {
+      try {
+        const response = await axiosClient.get(`product?tags=hot sale`);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("lỗi khi lọc các sản phẩm hot sale");
+      }
+    },
+    async getNewProduct() {
+      try {
+        const response = await axiosClient.get(`product?tags=new product`);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("lỗi khi lọc các sản phẩm mới");
+      }
+    },
+    async getProductByTag(tag) {
+      try {
+        const response = await axiosClient.get(`product?tags=${tag}`);
+        console.log(response.data);
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        throw new Error("lỗi khi lọc sản phẩm theo tag");
       }
     },
   },

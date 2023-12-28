@@ -17,7 +17,7 @@
             type="text"
             placeholder="title of product"
             v-model="updatedDescription"
-            rows="2"
+            rows="4"
             class="outline-none px-4 py-2 capitalize border rounded-md"
           ></textarea>
         </div>
@@ -39,7 +39,7 @@
               >
                 <ComboboxInput
                   class="w-full border outline-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-                  :displayValue="() => selectedBrand"
+                  :displayValue="(brand) => brand.title"
                   @change="queryBrand = $event.target.value"
                 />
                 <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -105,7 +105,7 @@
               >
                 <ComboboxInput
                   class="w-full border outline-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-                  :displayValue="() => selectedCategory"
+                  :displayValue="(category) => category.title"
                   @change="queryCategory = $event.target.value"
                 />
                 <ComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -279,24 +279,29 @@ import {
 } from "@headlessui/vue";
 import { CheckIcon, ChevronUpDownIcon, PlusIcon, TrashIcon } from "@heroicons/vue/24/solid";
 import { useGeneralStore } from "../stores/generalStore";
+
 const route = useRoute();
 const productStore = useProductStore();
 const generalStore = useGeneralStore();
 const data = ref(null);
+// brand
 const selectedBrand = ref("");
 const queryBrand = ref("");
 const brand = ref([]);
-const selectedCategory = ref();
-
+// category
+const selectedCategory = ref("");
 const queryCategory = ref("");
 const category = ref([]);
-const selectedColor = ref();
+// color
+const selectedColor = ref("");
 const queryColor = ref("");
 const color = ref([]);
+// img
 const imgProduct = ref([]);
-const updatedTitle = ref();
-const updatedDescription = ref();
-const updatedPrice = ref();
+//
+const updatedTitle = ref("");
+const updatedDescription = ref("");
+const updatedPrice = ref("");
 
 onMounted(async () => {
   data.value = await productStore.getProductById(route.params.id);
@@ -304,18 +309,18 @@ onMounted(async () => {
   updatedDescription.value = data.value.description;
   updatedPrice.value = data.value.price;
 
-  // brand
   brand.value = await generalStore.getBrand();
   selectedBrand.value = data.value.brand;
-  // category
+
   category.value = await productStore.getAllCategoryProduct();
   selectedCategory.value = data.value.category;
-  // color
+
   color.value = await generalStore.getColor();
   selectedColor.value = data.value.color;
-  // img of product
+
   imgProduct.value = data.value.images;
 });
+
 const filteredBrand = computed(() => {
   return queryBrand.value === ""
     ? brand.value
@@ -326,6 +331,7 @@ const filteredBrand = computed(() => {
           .includes(queryBrand.value.toLowerCase().replace(/\s+/g, ""))
       );
 });
+
 const filteredCategory = computed(() => {
   return queryCategory.value === ""
     ? category.value
@@ -336,6 +342,7 @@ const filteredCategory = computed(() => {
           .includes(queryCategory.value.toLowerCase().replace(/\s+/g, ""))
       );
 });
+
 const filteredColor = computed(() => {
   return queryColor.value === ""
     ? color.value
@@ -346,6 +353,7 @@ const filteredColor = computed(() => {
           .includes(queryColor.value.toLowerCase().replace(/\s+/g, ""))
       );
 });
+
 const deleteImg = async (imgId) => {
   try {
     generalStore.isLoading = true;
@@ -360,16 +368,30 @@ const deleteImg = async (imgId) => {
     console.log(error);
   }
 };
-const updateProductById = (productId) => {
-  console.log(
-    productId,
-    updatedTitle.value,
-    updatedDescription.value,
-    updatedPrice.value,
-    selectedBrand.value,
-    selectedCategory.value.title,
-    selectedColor.value.title,
-    imgProduct.value
-  );
+
+const updateProductById = async (productId) => {
+  try {
+    const updatedProduct = {
+      title: updatedTitle.value,
+      description: updatedDescription.value,
+      price: updatedPrice.value,
+      brand: selectedBrand.value.title, // Gửi ID của brand đã chọn, không phải tên của nó
+      category: selectedCategory.value.title,
+      color: selectedColor.value.title,
+      images: imgProduct.value,
+    };
+
+    // Gọi API để cập nhật sản phẩm thông qua productStore
+    const response = await productStore.updateProduct(productId, updatedProduct);
+
+    // Xử lý kết quả trả về từ API (response)
+    console.log("Sản phẩm đã được cập nhật:", response);
+
+    // Thực hiện các hành động cần thiết sau khi cập nhật sản phẩm thành công
+    // Ví dụ: Hiển thị thông báo, chuyển hướng trang, làm mới dữ liệu, vv.
+  } catch (error) {
+    console.error("Lỗi khi cập nhật sản phẩm:", error);
+    // Xử lý lỗi, hiển thị thông báo cho người dùng, vv.
+  }
 };
 </script>

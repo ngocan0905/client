@@ -1,33 +1,40 @@
 <template>
   <ClientLayout>
-    <div class="flex w-3/4 justify-center py-10">
+    <div class="glassmorphism-container flex w-3/4 justify-center py-10">
       <aside class="flex flex-col w-[20%]">
         <div class="w-full">
           <div class="mt-6">
             <div class="font-bold">
               <div>Danh mục</div>
             </div>
-            <div v-for="item in category" class="flex">
-              <input type="checkbox" class="mx-2 default:ring-2" />
-              <div class="capitalize">{{ item.title }}</div>
+            <div v-for="item in category" :key="item._id" class="flex">
+              <input
+                type="radio"
+                class="mx-2 default:ring-2"
+                :id="`category-${item._id}`"
+                :value="item.title"
+                name="category"
+                v-model="selectedCategory"
+                @change="handleCategoryChange"
+              />
+              <label :for="`category-${item._id}`" class="capitalize">{{ item.title }}</label>
             </div>
           </div>
           <div class="mt-10">
             <div class="font-bold">
               <div>Thương hiệu</div>
             </div>
-            <div v-for="item in brand" class="flex">
-              <input type="checkbox" class="mx-2" />
-              <div class="capitalize">{{ item.title }}</div>
-            </div>
-          </div>
-          <div class="mt-10">
-            <div class="font-bold">
-              <div>Mức giá</div>
-            </div>
-            <div v-for="item in rangePrice" class="flex">
-              <input type="checkbox" class="mx-2" />
-              <div class="capitalize">{{ item.text }}</div>
+            <div v-for="item in brand" :key="item._id" class="flex">
+              <input
+                type="radio"
+                class="mx-2"
+                :id="`brand-${item._id}`"
+                :value="item.title"
+                name="brand"
+                v-model="selectedBrand"
+                @change="handleBrandChange"
+              />
+              <label :for="`brand-${item._id}`" class="capitalize">{{ item.title }}</label>
             </div>
           </div>
         </div>
@@ -66,7 +73,7 @@
           class="gap-10 justify-center w-full"
           :class="listOption ? 'flex flex-col' : 'grid grid-cols-3'"
         >
-          <div v-for="item in product" class="">
+          <div v-for="item in product" :key="item._id" class="">
             <ProductCard :data="item" class="" />
           </div>
         </div>
@@ -74,55 +81,75 @@
     </div>
   </ClientLayout>
 </template>
+
 <script setup>
 import ClientLayout from "../layouts/ClientLayout.vue";
 import axiosClient from "../api/axiosClient";
 import ProductCard from "../components/ProductCard.vue";
 import { Squares2X2Icon, ListBulletIcon } from "@heroicons/vue/24/solid";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
+import { useProductStore } from "../stores/productStore";
 
-const product = ref();
-const category = ref();
-const brand = ref();
+const productStore = useProductStore();
+const product = ref([]);
+const category = ref([]);
+const brand = ref([]);
 const listOption = ref(false);
+const selectedCategory = ref("");
+const selectedBrand = ref("");
+
+onMounted(async () => {
+  product.value = await productStore.getAllProduct();
+  const categories = (await axiosClient.get("proCat")).data;
+  category.value = categories.map((item) => ({ ...item, checked: false }));
+
+  const brands = (await axiosClient.get("brand")).data;
+  brand.value = brands.map((item) => ({ ...item, checked: false }));
+});
+
+const getDataByQuery = async () => {
+  try {
+    let queryString = "";
+
+    if (selectedCategory.value) {
+      queryString += `category=${selectedCategory.value}`;
+    }
+
+    if (selectedBrand.value) {
+      queryString += `${queryString ? "&" : ""}brand=${selectedBrand.value}`;
+    }
+
+    const response = await axiosClient.get(`product?${queryString}`);
+    product.value = response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const changeOption = () => {
   listOption.value = !listOption.value;
-  console.log(listOption.value);
 };
-console.log(listOption.value);
-const rangePrice = [
-  {
-    id: 1,
-    text: "Tất cả",
-  },
-  {
-    id: 2,
-    text: "Dưới 2 triệu",
-  },
-  {
-    id: 3,
-    text: "Từ 2 - 4 triệu",
-  },
-  {
-    id: 4,
-    text: "Từ 4 - 7 triệu",
-  },
-  {
-    id: 5,
-    text: "Từ 7 - 13 triệu",
-  },
-  {
-    id: 6,
-    text: "Trên 13 triệu",
-  },
-];
-onMounted(async () => {
-  const prodcuts = await axiosClient.get("product");
-  const categories = await axiosClient.get("proCat");
-  const brands = await axiosClient.get("brand");
-  product.value = prodcuts.data;
-  category.value = categories.data;
-  brand.value = brands.data;
-});
+
+const handleCategoryChange = () => {
+  getDataByQuery();
+};
+
+const handleBrandChange = () => {
+  getDataByQuery();
+};
 </script>
-<style scoped></style>
+
+<style scoped>
+.glassmorphism-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Các rules CSS khác để thay đổi giao diện theo phong cách glassmorphism */
+/* ... */
+</style>

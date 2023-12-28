@@ -6,7 +6,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-
+      name: "home",
       component: HomeView,
     },
     {
@@ -37,6 +37,11 @@ const router = createRouter({
       path: "/cart/checkout/:id",
       name: "checkout",
       component: () => import("../views/CheckoutView.vue"),
+    },
+    {
+      path: "/cart/invoice",
+      name: "Invoice",
+      component: () => import("../views/InvoiceView.vue"),
     },
     {
       path: "/product/:id",
@@ -130,6 +135,16 @@ const router = createRouter({
         breadcrumb: ` > product > id`,
       },
       component: () => import("../views/EditProduct.vue"),
+    },
+    {
+      path: "/dashboard/order",
+      name: "OrderManagement",
+      component: () => import("../views/OrderManagement.vue"),
+    },
+    {
+      path: "/statistics",
+      name: "Statistics",
+      component: () => import("../views/StatisticsView.vue"),
     },
   ],
 });

@@ -9,6 +9,7 @@
   <CreateBlogCategoryOverlay v-if="generalStore.isCreateBlogCategoryOpen" />
   <CreateBrandOverlay v-if="generalStore.isCreateBrandOpen" />
   <CreateCouponOverlay v-if="generalStore.isCreateCouponOpen" />
+  <CreateTag v-if="generalStore.isCreateTagProduct" />
   <LoadingOverlay v-if="generalStore.isLoading" />
 </template>
 
@@ -24,5 +25,6 @@ import CreateCouponOverlay from "./components/CreateCoupon.vue";
 import LoadingOverlay from "./components/LoadingOverlay.vue";
 import { useGeneralStore } from "./stores/generalStore";
 import CreateAdminOverlay from "./components/CreateAdmin.vue";
+import CreateTag from "./components/CreateTag.vue";
 const generalStore = useGeneralStore();
 </script>

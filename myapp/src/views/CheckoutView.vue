@@ -27,7 +27,7 @@
 
       <p class="mt-8 text-lg font-medium">Shipping Methods</p>
       <form class="mt-5 grid gap-6">
-        <div class="relative" @click="shipoingFee = 4">
+        <div class="relative" @click="shippingFee = 4">
           <input class="peer hidden" id="radio_1" type="radio" name="radio" checked />
           <span
             class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"
@@ -42,7 +42,7 @@
             </div>
           </label>
         </div>
-        <div class="relative" @click="shipoingFee = 8">
+        <div class="relative" @click="shippingFee = 8">
           <input class="peer hidden" id="radio_2" type="radio" name="radio" checked />
           <span
             class="peer-checked:border-gray-700 absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white"
@@ -84,7 +84,7 @@
           </div>
         </div>
       </form>
-      <form @submit="submitPayment">
+      <form @submit.prevent="submitPayment">
         <!-- Form fields for billing details -->
         <div class="mb-4">
           <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name on Card:</label>
@@ -111,7 +111,7 @@
           <label for="card-element" class="block text-gray-700 text-sm font-bold mb-2"
             >Card details:</label
           >
-          <div id="card-element" ref="cardElement" class="border border-gray-300 p-2 rounded"></div>
+          <div id="card-element" class="border border-gray-300 p-2 rounded"></div>
         </div>
         <!-- Add more fields as needed for billing details -->
         <div class="font-semibold py-2">
@@ -119,7 +119,7 @@
         </div>
         <hr class="w-full" />
         <div class="font-light py-2">
-          Shipping fee : $ <span>{{ shipoingFee }}</span>
+          Shipping fee : $ <span>{{ shippingFee }}</span>
         </div>
         <hr class="w-full" />
         <div class="text-xl font-semibold py-4">
@@ -143,58 +143,94 @@ import { ArrowSmallLeftIcon } from "@heroicons/vue/24/outline";
 import { useUserStore } from "../stores/userStore";
 import SectionProductInCheckout from "../components/SectionProductInCheckout.vue";
 import { loadStripe } from "@stripe/stripe-js";
+
 const router = useRouter();
 const userStore = useUserStore();
 const cart = ref();
-const shipoingFee = ref(8);
+const shippingFee = ref(8);
 const userCoupon = ref("");
 const usedVoucher = ref(false);
+
 const cartPrice = computed(() => {
   return cart.value.totalAfterDiscount ? cart.value.totalAfterDiscount : cart.value.cartTotal;
 });
+
 const totalPrice = computed(() => {
-  return cart.value ? cartPrice.value + shipoingFee.value : 0;
+  return cart.value ? cartPrice.value + shippingFee.value : 0;
 });
+
+const roundedAmount = computed(() => {
+  return Math.round(totalPrice.value);
+});
+
 const stripePromise = loadStripe(
   "pk_test_51OMpt3ABlcms0qAXTLB5Ou5bqLLcyNgMWHNNtMffAEPFnrWJXO5Hbv4KzB5CDyQszPYT6EkGMnFujW24m6qhJzCy00zV7cUj2l"
 );
+
 const billingDetails = ref({
   name: "",
   email: "",
 });
+
 const cardElement = ref(null);
+
 onMounted(async () => {
   cart.value = await userStore.loadProductInCart();
   const stripe = await stripePromise;
   const elements = stripe.elements();
-  const card = elements.create("card");
-  card.mount(cardElement.value);
-  cardElement.value = card;
+  cardElement.value = elements.create("card");
+  cardElement.value.mount("#card-element");
 });
+
 const submitCoupon = async () => {
   const apply = await userStore.applyCoupon(userCoupon.value);
   if (apply) {
     usedVoucher.value = true;
   }
 };
-const submitPayment = async () => {
-  const stripe = await stripePromise;
-  const result = await stripe.createPaymentMethod({
-    type: "card",
-    card: cardElement.value,
-    billing_details: {
-      name: billingDetails.value.email,
-      email: billingDetails.value.email,
-    },
-  });
 
-  if (result.error) {
-    console.error(result.error);
-  } else {
-    console.log(result.paymentMethod);
-    // Gửi result.paymentMethod.id về server của bạn để xử lý thanh toán
+const submitPayment = async () => {
+  try {
+    const stripeInstance = await stripePromise;
+    const { error, paymentMethod } = await stripeInstance.createPaymentMethod({
+      type: "card",
+      card: cardElement.value,
+      billing_details: {
+        name: billingDetails.value.name,
+        email: billingDetails.value.email,
+      },
+    });
+
+    if (error) {
+      console.error("Error creating PaymentMethod:", error);
+    } else {
+      const paymentMethodId = paymentMethod.id;
+      const paymentDetails = {
+        paymentMethodId: paymentMethodId,
+        amount: roundedAmount.value,
+        name: billingDetails.value.name,
+        email: billingDetails.value.email,
+      };
+
+      const orderResponse = await userStore.createOder(paymentDetails);
+      if (orderResponse) {
+        const clientSecret = orderResponse.clientSecret;
+        const confirmResult = await stripeInstance.confirmCardPayment(clientSecret, {
+          payment_method: paymentMethodId,
+        });
+        if (confirmResult.error) {
+          console.log(confirmResult.error);
+        } else {
+          console.log(confirmResult.paymentIntent);
+        }
+      }
+    }
+    router.push({ name: "Invoice" });
+  } catch (error) {
+    console.log("Error processing payment:", error);
   }
 };
+
 const goBack = () => {
   router.go(-1);
 };

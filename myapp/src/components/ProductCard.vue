@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="data"
-      class="w-full max-w-[300px] h-auto pb-10 my-10 shadow-xl rounded-lg overflow-hidden relative border-2"
+      class="glassmorphism-card w-full max-w-[300px] h-auto pb-10 my-10 shadow-xl rounded-lg overflow-hidden relative border-2"
     >
       <div class="absolute right-2 top-2">
         <HeartIcon
@@ -71,3 +71,19 @@ onMounted(() => {
   wishlist.value = jsCookie.get("wishlist");
 });
 </script>
+<style scoped>
+.glassmorphism-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.glassmorphism-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Các rules CSS khác để thay đổi giao diện theo phong cách glassmorphism */
+/* ... */
+</style>

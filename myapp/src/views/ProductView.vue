@@ -1,7 +1,7 @@
 <template>
   <ClientLayout>
     <div v-if="product" class="w-4/5 text-gray-900 capitalize mt-10">
-      <div class="w-full grid grid-cols-6 bg-white shadow-2xl rounded-lg">
+      <div class="w-full grid grid-cols-6 bg-white shadow rounded-lg">
         <div
           class="col-span-3 flex items-center justify-center"
           v-for="(img, index) of product.images"
@@ -10,7 +10,7 @@
           <img :src="img[0].url" alt="" class="object-contain max-w-sm" />
         </div>
         <div class="col-span-3 px-4 py-2 relative">
-          <div class="absolute bottom-2 right-2 flex gap-3">
+          <div v-if="product.quantity > 0" class="absolute bottom-2 right-2 flex gap-3">
             <button
               @click="addToCart(product._id)"
               class="px-4 py-2 bg-gray-300 hover:bg-gray-400 duration-300 text-gray-900 rounded-md text-lg"
@@ -22,6 +22,12 @@
             >
               Buy Now
             </button>
+          </div>
+          <div
+            v-else
+            class="text-red-500 absolute bottom-10 right-10 text-2xl font-bold border-2 p-2 border-red-500"
+          >
+            Sold out
           </div>
           <div class="text-xl font-bold py-2">{{ product.title }}</div>
           <hr class="w-full" />
@@ -102,13 +108,13 @@
       </div>
       <div class="mt-24">
         <div class="text-xl font-semibold my-4">Description</div>
-        <div class="bg-white rounded-lg p-4 shadow-2xl">
+        <div class="bg-white rounded-lg p-4 shadow">
           {{ product.description }}
         </div>
       </div>
       <div class="mt-24">
         <div class="text-xl font-semibold my-4">Reviews</div>
-        <div class="bg-white shadow-2xl rounded-lg px-2 py-4">
+        <div class="bg-white shadow rounded-lg px-2 py-4">
           <section v-if="product.ratings.length == 0" class="py-2">
             <div class="font-semibold">No comment there.</div>
           </section>
@@ -125,16 +131,16 @@
         </div>
       </div>
       <div class="my-24">
-        <div class="text-xl font-semibold my-4">Our hot products</div>
-        <div class="bg-white shadow-2xl rounded-lg">
-          <SlidePoduct />
+        <div class="text-xl font-semibold my-4">Recommend products</div>
+        <div class="bg-white shadow rounded-lg">
+          <SlidePoduct :data="recommendProduct" />
         </div>
       </div>
     </div>
   </ClientLayout>
 </template>
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 import ClientLayout from "../layouts/ClientLayout.vue";
 import NameById from "../components/NameById.vue";
 import StarRating from "vue-star-rating";
@@ -148,6 +154,7 @@ const router = useRouter();
 const productStore = useProductStore();
 const userStore = useUserStore();
 const product = ref();
+const recommendProduct = ref([]);
 const rating = ref(0);
 const comment = ref("");
 const onRatingUpdate = (newRating) => {
@@ -190,9 +197,37 @@ const addToCart = (productId, count = 1, selectedColor) => {
 
   userStore.addToCart(productId, count, color);
 };
+const loadProduct = async (productId) => {
+  try {
+    const newProduct = await productStore.getProductById(productId);
+
+    if (newProduct) {
+      product.value = newProduct;
+    } else {
+      console.log("1");
+    }
+  } catch (error) {
+    console.error("Error loading product:", error);
+  }
+};
+watchEffect(() => {
+  const productId = route.params.id;
+  loadProduct(productId);
+});
+
 onMounted(async () => {
-  // get product by id
   product.value = await productStore.getProductById(route.params.id);
-  // get color of product
+
+  const productsByTag = await productStore.getProductByTag(product.value.tags[0]);
+  if (productsByTag && productsByTag.length > 0) {
+    // Lọc bỏ sản phẩm hiện tại ra khỏi danh sách sản phẩm khuyến nghị
+    recommendProduct.value = productsByTag.filter(
+      (recommendedProduct) => recommendedProduct._id !== product.value._id
+    );
+  } else {
+    console.log("No products found for this tag");
+  }
+  console.log(recommendProduct.value);
 });
 </script>
+<style scoped></style>
