@@ -1,61 +1,78 @@
 <template>
   <ClientLayout>
-    <div class="glassmorphism-container flex w-3/4 justify-center py-10">
-      <aside class="flex flex-col w-[20%]">
+    <div class="grid grid-cols-4 min-h-screen relative">
+      <aside class="col-span-1 flex flex-col w-full mt-24">
         <div class="w-full">
           <div class="mt-6">
             <div class="font-bold">
               <div>Danh mục</div>
             </div>
-            <div v-for="item in category" :key="item._id" class="flex">
+            <div v-for="item in category" :key="item._id" class="flex items-center mb-2">
               <input
                 type="radio"
-                class="mx-2 default:ring-2"
-                :id="`category-${item._id}`"
+                class="mx-2 appearance-none rounded border border-gray-300 w-4 h-4 checked:bg-blue-600 checked:border-transparent"
+                :id="`category-${item.title}`"
                 :value="item.title"
                 name="category"
                 v-model="selectedCategory"
                 @change="handleCategoryChange"
               />
-              <label :for="`category-${item._id}`" class="capitalize">{{ item.title }}</label>
+              <label :for="`category-${item.title}`" class="capitalize text-white cursor-pointer">{{
+                item.title
+              }}</label>
             </div>
           </div>
           <div class="mt-10">
             <div class="font-bold">
               <div>Thương hiệu</div>
             </div>
-            <div v-for="item in brand" :key="item._id" class="flex">
+            <div v-for="item in brand" :key="item._id" class="flex items-center mb-2">
               <input
                 type="radio"
-                class="mx-2"
+                class="mx-2 appearance-none rounded border border-gray-300 w-4 h-4 checked:bg-blue-600 checked:border-transparent"
                 :id="`brand-${item._id}`"
                 :value="item.title"
                 name="brand"
                 v-model="selectedBrand"
                 @change="handleBrandChange"
               />
-              <label :for="`brand-${item._id}`" class="capitalize">{{ item.title }}</label>
+              <label :for="`brand-${item._id}`" class="capitalize text-white cursor-pointer">{{
+                item.title
+              }}</label>
             </div>
           </div>
         </div>
       </aside>
-      <div class="border p-4 rounded-lg w-full">
-        <div class="mb-2 w-full h-10 flex items-center justify-between">
+      <div class="p-4 col-span-3 rounded-lg w-full relative mt-24">
+        <div class="mb-2 w-full h-10 flex items-center justify-between glassmorphism-container">
           <div>
             <label for="option" class="font-semibold">Ưu tiên xem:</label>
             <button
+              :class="{ active: selectedSortBy === 'sold_desc' }"
+              @click="handleSortByBestSelling"
               class="mx-2 px-2 py-1 border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-gray-100"
             >
               Bán chạy nhất</button
             ><button
+              :class="{ active: selectedSortBy === 'price_asc' }"
+              @click="handleSortByPriceLow"
               class="mx-2 px-2 py-1 border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-gray-100"
             >
               Giá thấp
             </button>
             <button
+              :class="{ active: selectedSortBy === 'price_desc' }"
+              @click="handleSortByPriceHigh"
               class="mx-2 px-2 py-1 border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-gray-100"
             >
               Giá cao
+            </button>
+            <button
+              :class="{ active: selectedSortBy === '' }"
+              @click="handleSortByNewCreateAt"
+              class="mx-2 px-2 py-1 border border-gray-900 rounded-lg hover:bg-gray-900 hover:text-gray-100"
+            >
+              Mới nhất
             </button>
           </div>
           <div class="flex">
@@ -70,7 +87,7 @@
         </div>
 
         <div
-          class="gap-10 justify-center w-full"
+          class="gap-10 justify-center w-full glassmorphism-container"
           :class="listOption ? 'flex flex-col' : 'grid grid-cols-3'"
         >
           <div v-for="item in product" :key="item._id" class="">
@@ -97,6 +114,7 @@ const brand = ref([]);
 const listOption = ref(false);
 const selectedCategory = ref("");
 const selectedBrand = ref("");
+const selectedSortBy = ref("");
 
 onMounted(async () => {
   product.value = await productStore.getAllProduct();
@@ -118,6 +136,9 @@ const getDataByQuery = async () => {
     if (selectedBrand.value) {
       queryString += `${queryString ? "&" : ""}brand=${selectedBrand.value}`;
     }
+    if (selectedSortBy.value) {
+      queryString += `${queryString ? "&" : ""}sort=${selectedSortBy.value}`;
+    }
 
     const response = await axiosClient.get(`product?${queryString}`);
     product.value = response.data;
@@ -137,19 +158,30 @@ const handleCategoryChange = () => {
 const handleBrandChange = () => {
   getDataByQuery();
 };
+const handleSortByBestSelling = () => {
+  selectedSortBy.value = "sold_desc";
+  getDataByQuery();
+};
+
+const handleSortByPriceLow = () => {
+  selectedSortBy.value = "price_asc";
+  getDataByQuery();
+};
+
+const handleSortByPriceHigh = () => {
+  selectedSortBy.value = "price_desc";
+  getDataByQuery();
+};
+const handleSortByNewCreateAt = () => {
+  selectedSortBy.value = "";
+  getDataByQuery();
+};
 </script>
 
 <style scoped>
-.glassmorphism-container {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+button.active {
+  background-color: rgb(0, 0, 0); /* Chọn màu bạn muốn cho button active */
+  color: white;
+  /* Bất kỳ CSS khác bạn muốn áp dụng cho button active */
 }
-
-/* Các rules CSS khác để thay đổi giao diện theo phong cách glassmorphism */
-/* ... */
 </style>

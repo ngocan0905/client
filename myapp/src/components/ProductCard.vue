@@ -46,7 +46,6 @@ import { useGeneralStore } from "../stores/generalStore";
 const productStore = useProductStore();
 const generalStore = useGeneralStore();
 const { data } = defineProps(["data"]);
-
 const wishlist = ref([]);
 const isLiked = computed(() => {
   return productStore.isProductInWishList(data._id);
@@ -71,19 +70,7 @@ onMounted(() => {
   wishlist.value = jsCookie.get("wishlist");
 });
 </script>
-<style scoped>
-.glassmorphism-card {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border: 2px solid transparent;
-  transition: border-color 0.3s ease-in-out;
-}
-
-.glassmorphism-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
+<style>
 /* Các rules CSS khác để thay đổi giao diện theo phong cách glassmorphism */
 /* ... */
 </style>

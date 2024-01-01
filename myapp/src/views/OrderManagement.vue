@@ -1,7 +1,7 @@
 <template>
   <AdminLayout>
     <div class="w-full h-full relative">
-      <div class="flex items-center justify-evenly my-4">
+      <div class="flex items-center justify-evenly my-2">
         <div
           class="border-2 border-gray-800 text-lg font-semibold mx-4 px-4 py-2 rounded text-center"
         >

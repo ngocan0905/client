@@ -1,8 +1,9 @@
 <template>
   <div class="col-span-4 capitalize">{{ data.name }}</div>
-  <div class="col-span-3 flex justify-center">Discount: {{ data.discount }}%</div>
+  <div class="col-span-2 flex justify-center">Discount: {{ data.discount }}%</div>
+  <div class="col-span-2 flex justify-center">Status: {{ displayStatus(data.isUsed) }}</div>
   <div class="col-span-3 flex justify-center">Expiry at : {{ formatDate(data.expiry) }}</div>
-  <div class="col-span-2 flex justify-end">
+  <div class="col-span-1 flex justify-end">
     <Menu as="div" class="relative inline-block text-left mr-4">
       <MenuButton class="flex flex-col w-full items-center">
         <Cog8ToothIcon class="w-6 h-6 text-gray-600" />
@@ -53,4 +54,7 @@ function formatDate(date) {
 const handleDeleteCoupon = (couponId) => {
   emits("delete", couponId);
 };
+function displayStatus(isUsed) {
+  return isUsed ? "Used" : "Not Used";
+}
 </script>

@@ -1,5 +1,8 @@
 <template>
-  <div v-if="blog" class="p-4 mb-10 bg-gray-100 drop-shadow-2xl rounded-lg border border-gray-200">
+  <div
+    v-if="blog"
+    class="p-4 max-w-2xl h-fit mb-10 bg-gray-100 drop-shadow-2xl rounded-lg border text-black border-gray-200"
+  >
     <div class="py-1 font-semibold hover:underline cursor-pointer">{{ blog.author }}</div>
     <div class="py-1 mb-2">{{ formatDate(blog.updatedAt) }}</div>
     <router-link
@@ -15,17 +18,17 @@
       <div class="flex justify-between items-center">
         <div class="flex">
           <button class="flex py-2 px-4 rounded-full border hover:border-gray-900">
-            <HandThumbUpIcon class="w-6 h-6 mx-2 text-gray-400" />
+            <HandThumbUpIcon class="w-6 h-6 mx-2 text-gray-800" />
             <div>{{ blog.likes.length }}</div>
           </button>
           <button class="flex py-2 px-4 rounded-full border hover:border-gray-900 ml-2">
-            <HandThumbDownIcon class="w-6 h-6 mx-2 text-gray-400" />
+            <HandThumbDownIcon class="w-6 h-6 mx-2 text-gray-800" />
             <div>{{ blog.disLikes.length }}</div>
           </button>
         </div>
 
         <button class="flex">
-          <ShareIcon class="w-6 h-6 mx-2 text-gray-400" />
+          <ShareIcon class="w-6 h-6 mx-2 text-gray-800" />
           <div>Share</div>
         </button>
       </div>

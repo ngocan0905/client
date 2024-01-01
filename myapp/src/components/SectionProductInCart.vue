@@ -15,12 +15,9 @@
             </div>
             <div class="text-lg font-semibold">${{ product.price }}</div>
           </div>
-          <div>quantity: {{ product.count }}</div>
-          <button
-            class="px-3 py-1 rounded font-semibold bg-gray-400 hover:bg-gray-800 hover:text-gray-100 duration-500"
-            @click="deleteProductInCartById(product.product._id)"
-          >
-            Remove
+          <div class="font-semibold">quantity: {{ product.count }}</div>
+          <button class="" @click="deleteProductInCartById(product.product._id)">
+            <TrashIcon class="h-8 w-8 text-red-500 hover:scale-105 active:scale-95 duration-300" />
           </button>
         </div>
       </div>
@@ -30,6 +27,7 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import { useUserStore } from "../stores/userStore";
+import { TrashIcon } from "@heroicons/vue/24/outline";
 import { useGeneralStore } from "../stores/generalStore";
 const userStore = useUserStore();
 const generalStore = useGeneralStore();

@@ -8,11 +8,11 @@ import { onMounted } from "vue";
 import AdminLayout from "../layouts/AdminLayout.vue";
 import jsCookie from "js-cookie";
 import { useGeneralStore } from "../stores/generalStore";
+import { useUserStore } from "../stores/userStore";
 const generalStore = useGeneralStore();
+const userStore = useUserStore();
+const userId = localStorage.getItem("userId");
 onMounted(() => {
-  const tokenAdmin = jsCookie.get("admin");
-  if (!tokenAdmin) {
-    generalStore.isAdminLoginOpen = true;
-  }
+  console.log(userId);
 });
 </script>

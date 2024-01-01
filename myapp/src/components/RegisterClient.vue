@@ -1,23 +1,15 @@
 <template>
   <div class="text-center text-[28px] mb-4 font-bold">Register</div>
-  <div>First name</div>
+  <div class="px-6 pb-1.5 text-[15px]">First name</div>
   <div class="px-6 pb-2">
     <TextInput
-      placeholder="Your first name"
-      v-model:input="firstName"
+      placeholder="Your  name"
+      v-model:input="displayName"
       inputType="text"
       :autoFocus="true"
     />
   </div>
-  <div>Last name</div>
-  <div class="px-6 pb-2">
-    <TextInput
-      placeholder="Your first name"
-      v-model:input="lasttName"
-      inputType="text"
-      :autoFocus="true"
-    />
-  </div>
+
   <div class="px-6 pb-1.5 text-[15px]">Email address</div>
   <div class="px-6 pb-2">
     <TextInput
@@ -54,22 +46,16 @@ import { useUserStore } from "../stores/userStore";
 import { useGeneralStore } from "../stores/generalStore";
 const userStore = useUserStore();
 const generalStore = useGeneralStore();
-let firstName = ref(null);
-let lasttName = ref(null);
+let displayName = ref(null);
 let email = ref(null);
 let password = ref(null);
 let mobile = ref(null);
 
 const register = async () => {
   try {
-    await userStore.registerUser(
-      firstName.value,
-      lasttName.value,
-      email.value,
-      mobile.value,
-      password.value
-    );
+    await userStore.registerUser(displayName.value, email.value, mobile.value, password.value);
     console.log(email);
+    location.reload();
     generalStore.isLoginOpen = false;
   } catch (error) {
     console.log(error);

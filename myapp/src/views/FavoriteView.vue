@@ -1,8 +1,8 @@
 <template>
   <ClientLayout>
-    <div class="w-4/5 h-full">
-      <div>
-        <div class="text-xl font-bold capitalize text-center py-4 text-gray-900">your favorite</div>
+    <div class="h-screen">
+      <div class="mt-32">
+        <div class="text-xl font-bold capitalize text-center py-4 text-white">your favorite</div>
       </div>
       <div class="grid grid-cols-4 gap-5">
         <div class="" v-for="product in validProducts" :key="product._id">

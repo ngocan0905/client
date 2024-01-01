@@ -4,10 +4,7 @@ import axiosAdmin from "../api/axiosAdmin";
 import Cookies from "js-cookie";
 
 export const useUserStore = defineStore("user", {
-  state: () => ({
-    isLogged: false,
-    adminLogged: false,
-  }),
+  state: () => ({}),
 
   actions: {
     async getUserById(id) {
@@ -25,29 +22,19 @@ export const useUserStore = defineStore("user", {
           password: password,
         });
         const token = request.data.token;
-        Cookies.set("user", token);
-        this.isLogged = true;
+        Cookies.set(request.data.role, token);
+
+        return request.data;
       } catch (error) {
-        console.log("loggin fail", error);
+        console.error(error);
+        throw new Error("loggin fail");
       }
     },
-    async loginAdmin(email, password) {
-      try {
-        const request = await axiosClient.post("/user/admin-login", {
-          email: email,
-          password: password,
-        });
-        const token = request.data.token;
-        Cookies.set("admin", token);
-      } catch (error) {
-        console.log("login admin failed", error);
-      }
-    },
-    async registerUser(lastName, firstName, email, phoneNumber, password) {
+
+    async registerUser(displayName, email, phoneNumber, password) {
       try {
         await axiosClient.post("/user/register", {
-          firstName: firstName,
-          lastName: lastName,
+          displayName: displayName,
           email: email,
           mobile: phoneNumber,
           password: password,
@@ -57,16 +44,40 @@ export const useUserStore = defineStore("user", {
         console.log(error);
       }
     },
-    async logoutUser() {
+    // logou user
+    async logout() {
       try {
-        await axiosClient.get("/user/logout");
-        Cookies.remove("user");
-        console.log("logout successed");
-        this.isLogged = false;
+        const admin = Cookies.get("admin");
+        const user = Cookies.get("user");
+
+        if (admin) {
+          await axiosClient.get("/user/logout", {
+            headers: {
+              Authorization: `Bearer ${admin}`,
+            },
+          });
+          Cookies.remove("admin");
+          console.log("Admin cookie removed");
+        }
+
+        if (user) {
+          await axiosClient.get("/user/logout", {
+            headers: {
+              Authorization: `Bearer ${user}`,
+            },
+          });
+          Cookies.remove("admin");
+          console.log("Admin cookie removed");
+        }
+
+        console.log("Logout Successed");
+        return "Logout Successed";
       } catch (error) {
-        console.log("logout fail", error);
+        console.log("Logout failed", error);
+        throw new Error("Logout failed");
       }
     },
+
     async addToCart(productId, count, color) {
       try {
         const cartItem = {

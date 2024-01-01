@@ -1,9 +1,9 @@
 <template>
   <ClientLayout>
-    <div v-if="product" class="w-4/5 text-gray-900 capitalize mt-10">
-      <div class="w-full grid grid-cols-6 bg-white shadow rounded-lg">
+    <div v-if="product" class="text-gray-100 capitalize mt-28">
+      <div class="w-full grid grid-cols-6 shadow rounded-lg">
         <div
-          class="col-span-3 flex items-center justify-center"
+          class="col-span-3 flex items-center justify-center glassmorphism-container"
           v-for="(img, index) of product.images"
           :key="index"
         >
@@ -13,14 +13,9 @@
           <div v-if="product.quantity > 0" class="absolute bottom-2 right-2 flex gap-3">
             <button
               @click="addToCart(product._id)"
-              class="px-4 py-2 bg-gray-300 hover:bg-gray-400 duration-300 text-gray-900 rounded-md text-lg"
+              class="hover:scale-105 active:scale-95 px-4 py-2 duration-300 bg-gradient-to-br from-purple-700 to-blue-700 text-white rounded-md text-lg"
             >
               Add To Cart
-            </button>
-            <button
-              class="px-4 py-2 bg-gray-700 hover:bg-gray-900 duration-300 text-gray-200 rounded-md text-lg"
-            >
-              Buy Now
             </button>
           </div>
           <div
@@ -41,19 +36,19 @@
               v-model="rating"
               @update:rating="onRatingUpdate"
             />
-            <div class="text-gray-500">({{ product.ratings.length }} review)</div>
+            <div class="text-white">({{ product.ratings.length }} review)</div>
           </div>
           <div class="w-full py-2">
-            <div class="text-gray-500">write a review</div>
+            <div class="text-white">write a review</div>
             <div class="relative flex items-center justify-end">
               <textarea
                 type="text"
-                class="w-full h-fit px-2 py-2 outline-none border"
+                class="w-full h-fit px-2 py-2 outline-none border glassmorphism-container"
                 v-model="comment"
               />
               <button
                 @click="postRating"
-                class="absolute bg-gray-500 right-2 text-gray-100 px-3 py-1 hover:bg-gray-700 hover:scale-105 duration-500"
+                class="absolute hover:scale-105 active:scale-95 px-4 py-2 mr-2 hover:bg-gray-400 duration-300 bg-gradient-to-br from-purple-700 to-blue-700 text-white rounded-md text-lg"
               >
                 Post
               </button>
@@ -63,24 +58,24 @@
           <div class="py-2 flex items-center">
             <div class="text-lg font-semibold">Type :</div>
 
-            <div class="text-gray-500 ml-2">{{ product.category }}</div>
+            <div class="text-white ml-2">{{ product.category }}</div>
           </div>
           <div class="py-2 flex items-center">
             <div class="text-lg font-semibold">brand :</div>
 
-            <div class="text-gray-500 ml-2">{{ product.brand }}</div>
+            <div class="text-white ml-2">{{ product.brand }}</div>
           </div>
           <div class="py-2">
             <div class="text-lg font-semibold">categories :</div>
 
-            <div class="text-gray-500 ml-2">
+            <div class="text-white ml-2">
               {{ product.category }}
             </div>
           </div>
           <div class="py-2 flex items-center">
             <div class="text-lg font-semibold">tags :</div>
 
-            <div class="text-gray-500 ml-2" v-for="tag in product.tags" :key="tag">
+            <div class="text-white ml-2" v-for="tag in product.tags" :key="tag">
               {{ tag }}
             </div>
           </div>
@@ -88,17 +83,17 @@
           <div class="py-2 flex items-center">
             <div class="text-lg font-semibold">SKU :</div>
 
-            <div class="text-gray-500 ml-2">kho nhà anh bi</div>
+            <div class="text-white ml-2">{{ product._id }}</div>
           </div>
           <div class="py-2 flex items-center">
             <div class="text-lg font-semibold">availability :</div>
 
-            <div class="text-gray-500 ml-2">{{ product.quanlity }} in stock</div>
+            <div class="text-white ml-2">{{ product.quantity }} in stock</div>
           </div>
 
           <div class="py-2 items-center">
             <div class="text-lg font-semibold">color :</div>
-            <div class="flex text-gray-500 ml-2">
+            <div class="flex text-white ml-2">
               <div v-for="item in product.color" class="flex" :key="item._id">
                 <div class="rounded-full w-8 h-8 ml-2" :style="{ 'background-color': item }"></div>
               </div>
@@ -108,13 +103,13 @@
       </div>
       <div class="mt-24">
         <div class="text-xl font-semibold my-4">Description</div>
-        <div class="bg-white rounded-lg p-4 shadow">
+        <div class="glassmorphism-container rounded-lg p-4 shadow">
           {{ product.description }}
         </div>
       </div>
       <div class="mt-24">
         <div class="text-xl font-semibold my-4">Reviews</div>
-        <div class="bg-white shadow rounded-lg px-2 py-4">
+        <div class="shadow rounded-lg px-2 py-4">
           <section v-if="product.ratings.length == 0" class="py-2">
             <div class="font-semibold">No comment there.</div>
           </section>
@@ -132,7 +127,7 @@
       </div>
       <div class="my-24">
         <div class="text-xl font-semibold my-4">Recommend products</div>
-        <div class="bg-white shadow rounded-lg">
+        <div class="glassmorphism-container shadow rounded-lg">
           <SlidePoduct :data="recommendProduct" />
         </div>
       </div>
@@ -157,6 +152,8 @@ const product = ref();
 const recommendProduct = ref([]);
 const rating = ref(0);
 const comment = ref("");
+const usersCmt = ref([]);
+
 const onRatingUpdate = (newRating) => {
   rating.value = newRating;
   console.log("rating" + rating.value);
@@ -230,4 +227,14 @@ onMounted(async () => {
   console.log(recommendProduct.value);
 });
 </script>
-<style scoped></style>
+<style scoped>
+.glassmorphism-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

@@ -1,14 +1,16 @@
 <template>
   <ClientLayout>
-    <div class="w-3/5 capitalize text-gray-900">
+    <div class="capitalize text-white min-h-screen">
       <div v-if="dataBlog" class="py-10">
         <div class="flex">
           posted by :
           <div class="cursor-pointer hover:underline ml-2 font-semibold">{{ dataBlog.author }}</div>
         </div>
 
-        <div class="my-6 text-2xl font-bold">{{ dataBlog.title }}</div>
-        <div class="flex items-center">
+        <div class="my-6 text-2xl font-extrabold flex justify-center mt-10">
+          {{ dataBlog.title }}
+        </div>
+        <div class="flex items-center font-bold">
           category :
           <button class="px-2 py-1 capitalize rounded-lg border border-gray-900 ml-2">
             {{ dataBlog.category }}
@@ -62,7 +64,9 @@
         </div>
         <hr class="w-full my-5" />
         <div>
-          <div class="text-gray-700 flex"><ArrowLeftIcon class="w-6 h-6 mr-4" /> Back to blog</div>
+          <button @click="backRoute" class="flex">
+            <ArrowLeftIcon class="w-6 h-6 mr-4" /> Back to blog
+          </button>
         </div>
         <hr class="w-full my-5" />
         <div class="p-4 rounded-lg shadow-xl border border-gray-200 mt-20">
@@ -84,7 +88,7 @@
 </template>
 <script setup>
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import {
   HandThumbUpIcon,
   HandThumbDownIcon,
@@ -96,6 +100,7 @@ import ClientLayout from "../layouts/ClientLayout.vue";
 import { useBlogStore } from "../stores/blogStore";
 const blogStore = useBlogStore();
 const route = useRoute();
+const router = useRouter();
 const dataBlog = ref();
 onMounted(async () => {
   const data = await blogStore.getBlogById(route.params.id);
@@ -104,5 +109,8 @@ onMounted(async () => {
 const formatDate = (dateTimeString) => {
   const date = new Date(dateTimeString);
   return date.toLocaleDateString();
+};
+const backRoute = () => {
+  router.go(-1);
 };
 </script>

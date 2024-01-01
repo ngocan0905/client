@@ -5,19 +5,47 @@
   >
     <div class="relative bg-white w-fit h-fit max-h-[600px] p4 rounded-lg overflow-auto">
       <div class="relative">
-        <div class="grid grid-cols-1 m-4">
-          <div class="col-span-1 flex flex-col p-4">
-            <label for="title" class="text-lg font-semibold">
-              Coupon<span class="text-red-500 ml-2">*</span></label
-            >
-            <input
-              id="title"
-              class="border outline-none p-1 capitalize shadow-md min-w-[300px] rounded-md my-2"
-              type="text"
-              v-model="selectedName"
-              placeholder="name of coupon"
-            />
-          </div>
+        <div class="col-span-1 flex flex-col p-4">
+          <label for="title" class="text-lg font-semibold"
+            >Coupon Name<span class="text-red-500 ml-2">*</span></label
+          >
+          <input
+            id="title"
+            class="border outline-none p-1 shadow-md min-w-[300px] rounded-md my-2"
+            type="text"
+            v-model="selectedName"
+            placeholder="Name of coupon"
+          />
+          <span v-if="!selectedName" class="text-red-500 text-sm">Please enter coupon name</span>
+        </div>
+        <div class="col-span-1 flex flex-col p-4">
+          <label for="expiryDate" class="text-lg font-semibold"
+            >Expiry Date<span class="text-red-500 ml-2">*</span></label
+          >
+          <input
+            id="expiryDate"
+            class="border outline-none p-1 shadow-md min-w-[300px] rounded-md my-2"
+            type="date"
+            v-model="selectedExpiryDate"
+          />
+          <span v-if="!selectedExpiryDate" class="text-red-500 text-sm"
+            >Please select expiry date</span
+          >
+        </div>
+        <div class="col-span-1 flex flex-col p-4">
+          <label for="discountPercentage" class="text-lg font-semibold"
+            >Discount Percentage<span class="text-red-500 ml-2">*</span></label
+          >
+          <input
+            id="discountPercentage"
+            class="border outline-none p-1 shadow-md min-w-[300px] rounded-md my-2"
+            type="number"
+            v-model.number="selectedDiscountPercentage"
+            placeholder="Enter discount percentage"
+          />
+          <span v-if="selectedDiscountPercentage < 0" class="text-red-500 text-sm"
+            >Discount percentage must be a positive number</span
+          >
         </div>
         <div class="flex justify-end items-center py-4">
           <button
@@ -51,18 +79,27 @@ import { useGeneralStore } from "../stores/generalStore";
 const generalStore = useGeneralStore();
 const couponStore = useCouponStore();
 const selectedName = ref("");
+const selectedExpiryDate = ref("");
+const selectedDiscountPercentage = ref(0);
 
 const createCoupon = async () => {
   try {
     generalStore.isLoading = true;
-    const created = await couponStore.createNewCoupon(selectedName.value, new Date(), 30);
-    if (created) {
-      location.reload();
-      generalStore.isCreateCouponOpen = false;
-      generalStore.isLoading = false;
+    if (selectedName.value && selectedExpiryDate.value && selectedDiscountPercentage.value >= 0) {
+      const created = await couponStore.createNewCoupon(
+        selectedName.value,
+        selectedExpiryDate.value,
+        selectedDiscountPercentage.value
+      );
+      if (created) {
+        generalStore.isCreateCouponOpen = false;
+        generalStore.isLoading = false;
+      }
+    } else {
+      console.log("Please fill in all required fields.");
     }
   } catch (error) {
-    console.log(error);
+    console.error("Failed to create coupon:", error);
   }
 };
 </script>

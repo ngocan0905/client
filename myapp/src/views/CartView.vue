@@ -1,19 +1,19 @@
 <template>
   <ClientLayout
-    ><div v-if="cart" class="min-h-[800px]">
-      <div v-for="data in cart.products" :key="data._id">
+    ><div v-if="cart" class="h-screen">
+      <div v-for="data in cart.products" :key="data._id" class="mt-36">
         <SectionProductInCart :product="data" />
       </div>
       <div class="capitalize text-lg font-semibold text-center mt-10">
         total price: ${{ cart.cartTotal }}
       </div>
 
-      <RouterLink
-        v-if="cart && cart._id"
-        :to="{ name: 'checkout', params: { id: cart._id } }"
-        class="font-bold text-xl capitalize flex justify-center w-full py-2 px-4 bg-gray-600 hover:bg-gray-900 text-white duration-300 mt-10 rounded-md"
-      >
-        checkout
+      <RouterLink v-if="cart && cart._id" :to="{ name: 'checkout', params: { id: cart._id } }">
+        <div
+          class="w-full text-center font-bold mt-10 active:scale-95 px-4 py-2 duration-300 bg-gradient-to-br from-purple-700 to-blue-700 text-white rounded-md text-lg"
+        >
+          Checkout
+        </div>
       </RouterLink>
     </div>
   </ClientLayout>

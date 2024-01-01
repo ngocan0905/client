@@ -1,5 +1,5 @@
 <template>
-  <Vue3Marquee pause-on-hover="true" class="py-2 overflow-hidden">
+  <Vue3Marquee :pause-on-hover="true" class="py-2 overflow-hidden bg-white rounded-lg">
     <img class="mx-4 h-36 w-auto object-cover" src="../assets/logo/asus-logo.png" alt="" />
     <img class="mx-4 h-20 w-auto object-cover" src="../assets/logo/hp-logo.png" alt="" />
     <img class="mx-4 h-20 w-auto object-cover" src="../assets/logo/Apple-logo.png" alt="" />

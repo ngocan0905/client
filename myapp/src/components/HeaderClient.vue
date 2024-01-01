@@ -1,24 +1,24 @@
 <template>
-  <div class="flex flex-col w-full items-center bg-gray-900 z-10">
-    <div class="text-white w-4/5 flex items-center py-3 font-mono">
-      <div class="text-4xl w-1/3 flex">
-        <a class="cursor-pointer" href="/">Tech World</a>
+  <div class="">
+    <div
+      class="flex items-center justify-between w-full max-w-7xl mx-auto py-3 px-4 md:px-8 text-white"
+    >
+      <div class="flex items-center w-1/3 md:w-1/4">
+        <router-link class="text-4xl font-extrabold" to="/">Tech World</router-link>
       </div>
-      <div
-        class="w-1/3 focus-within:w-full relative duration-300 rounded-full flex items-center bg-white"
-      >
+      <div class="w-1/2 md:w-2/4 relative duration-300">
         <input
           type="text"
           id="search"
           name="search"
           v-model="querySearch"
           @input="handleSearchProduct"
-          class="w-full rounded-full py-2 relative text-sm outline-none text-gray-800 px-4 placeholder:text-xs"
+          class="w-full rounded-full py-2 pl-4 pr-12 text-sm outline-none bg-inherit border text-gray-300 placeholder-gray-500"
           placeholder="Search product here..."
         />
         <MicrophoneIcon
           @click="startListening()"
-          class="h-8 w-8 cursor-pointer relative text-gray-600 p-1 hover:bg-gray-300 rounded-full mr-1 duration-300"
+          class="h-8 w-8 cursor-pointer absolute top-0.5 right-0 text-gray-300 p-1 hover:bg-gray-300 rounded-full mr-1 duration-300"
         />
         <section
           id="result"
@@ -73,30 +73,18 @@
       </div>
     </div>
     <hr class="w-full" />
-    <div class="text-white w-4/5 flex items-center py-3 uppercase">
-      <div class="text-md w-1/5 flex items-center border-r-4 border-double">
-        Shop categories
-        <ChevronDownIcon class="h-3 w-3 ml-4" />
-      </div>
-      <div class="w-1/3">
-        <div class="flex w-full justify-evenly">
-          <router-link to="/">home</router-link>
-          <router-link :to="{ name: 'store' }">store</router-link>
-          <router-link :to="{ name: 'blog' }">blogs</router-link>
-          <router-link :to="{ name: 'contact' }">contact</router-link>
-        </div>
+    <div class="text-white justify-center flex items-center py-3 uppercase w-full">
+      <div class="flex">
+        <router-link class="mx-8 font-bold" to="/">home</router-link>
+        <router-link class="mx-8 font-bold" :to="{ name: 'store' }">store</router-link>
+        <router-link class="mx-8 font-bold" :to="{ name: 'blog' }">blogs</router-link>
+        <router-link class="mx-8 font-bold" :to="{ name: 'contact' }">contact</router-link>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import {
-  HeartIcon,
-  UserIcon,
-  ShoppingCartIcon,
-  MicrophoneIcon,
-  ChevronDownIcon,
-} from "@heroicons/vue/24/outline";
+import { HeartIcon, UserIcon, ShoppingCartIcon, MicrophoneIcon } from "@heroicons/vue/24/outline";
 import { onMounted, ref } from "vue";
 import ProfileMenu from "./ProfileMenu.vue";
 import jsCookie from "js-cookie";
@@ -114,28 +102,6 @@ onMounted(() => {
     userIsLogged.value = true;
   }
 });
-// const currentProduct = ref(null); // Sản phẩm hiện tại
-
-// // Watch for changes in the route params (specifically :id)
-// watch(
-//   () => router.currentRoute.value.params.id,
-//   async (newId) => {
-//     // Fetch data for the new product based on the newId
-//     // Lấy dữ liệu cho sản phẩm mới dựa trên newId
-//     try {
-//       const response = await fetch(`/api/products/${newId}`); // Replace with your API endpoint
-//       const productData = await response.json();
-
-//       // Update the currentProduct with the new data
-//       // Cập nhật currentProduct với dữ liệu mới
-//       currentProduct.value = productData;
-//     } catch (error) {
-//       console.error("Error fetching product data:", error);
-//       // Handle error if data fetching fails
-//       // Xử lý lỗi nếu việc lấy dữ liệu thất bại
-//     }
-//   }
-// );
 
 const handleSearchProduct = async () => {
   if (transcript.value !== "") {
@@ -155,7 +121,7 @@ const startListening = () => {
   recognition.onresult = (event) => {
     const result = event.results[0][0].transcript;
     transcript.value = result;
-    handleSearchProduct(); // Gọi hàm xử lý tìm kiếm sản phẩm sau khi nhận diện giọng nói thành công
+    handleSearchProduct();
   };
   recognition.start();
 };
@@ -183,4 +149,6 @@ const startListening = () => {
   z-index: 1;
   white-space: nowrap;
 }
+
+/* Header styles when scrolled */
 </style>

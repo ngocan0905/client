@@ -3,7 +3,6 @@ import axiosClient from "../api/axiosClient";
 export const useGeneralStore = defineStore("general", {
   state: () => ({
     isLoginOpen: false,
-    isAdminLoginOpen: false,
     isLoading: false,
     isCreateUserOpen: false,
     isCreateProductOpen: false,

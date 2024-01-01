@@ -1,7 +1,7 @@
 <template>
   <ClientLayout>
-    <div class="w-1/2 my-10">
-      <div class="flex" v-for="blog in blogs" :key="blog">
+    <div class="min-h-screen flex justify-center">
+      <div class="mt-24" v-for="blog in blogs" :key="blog">
         <BlogPost :blog="blog" />
       </div>
     </div>

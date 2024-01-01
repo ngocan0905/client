@@ -1,6 +1,6 @@
 <template>
-  <div v-if="name" class="font-semibold">
-    {{ name.firstName + " " + name.lastName }}
+  <div v-if="userName" class="font-semibold">
+    {{ userName }}
   </div>
 </template>
 
@@ -9,9 +9,9 @@ const { data } = defineProps(["data"]);
 import { onMounted, ref } from "vue";
 import { useUserStore } from "../stores/userStore";
 const productStore = useUserStore();
-const name = ref();
+const userName = ref("");
 onMounted(async () => {
-  await productStore.getUserById(data);
-  name.value = productStore.user;
+  const user = await productStore.getUserById(data);
+  userName.value = user.firstName + " " + user.lastName;
 });
 </script>
